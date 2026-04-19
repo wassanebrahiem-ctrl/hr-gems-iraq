@@ -33,15 +33,16 @@ function EmployeeDetail() {
   const [openCom, setOpenCom] = useState(false);
 
   const e = employees.find((x) => x.id === id);
-  if (!e) return (
+  const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
+  const pr = useMemo(() => e ? promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes) : null, [e, penalties, penaltyTypes, commendations, commendationTypes]);
+
+  if (!e || !inc || !pr) return (
     <div className="text-center py-20">
       <p className="text-muted-foreground mb-4">الموظف غير موجود</p>
       <Link to="/employees"><Button variant="outline">العودة</Button></Link>
     </div>
   );
   const dept = departments.find((d) => d.id === e.departmentId);
-  const inc = useMemo(() => incrementStatus(e), [e]);
-  const pr = useMemo(() => promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes), [e, penalties, penaltyTypes, commendations, commendationTypes]);
   const empLeaves = leaves.filter((l) => l.employeeId === e.id);
   const empPenalties = penalties.filter((p) => p.employeeId === e.id);
   const empCommend = commendations.filter((c) => c.employeeId === e.id);
