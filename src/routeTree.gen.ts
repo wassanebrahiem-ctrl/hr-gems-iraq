@@ -15,6 +15,14 @@ import { Route as AppReportsIndexRouteImport } from './routes/_app.reports.index
 import { Route as AppEmployeesIndexRouteImport } from './routes/_app.employees.index'
 import { Route as AppAnalyticsIndexRouteImport } from './routes/_app.analytics.index'
 import { Route as AppEmployeesIdRouteImport } from './routes/_app.employees.$id'
+import { Route as AppSettingsSalaryIndexRouteImport } from './routes/_app.settings.salary.index'
+import { Route as AppSettingsPreferencesIndexRouteImport } from './routes/_app.settings.preferences.index'
+import { Route as AppSettingsPenaltiesIndexRouteImport } from './routes/_app.settings.penalties.index'
+import { Route as AppSettingsLegalIndexRouteImport } from './routes/_app.settings.legal.index'
+import { Route as AppSettingsLeavesIndexRouteImport } from './routes/_app.settings.leaves.index'
+import { Route as AppSettingsJobTitlesIndexRouteImport } from './routes/_app.settings.job-titles.index'
+import { Route as AppSettingsDepartmentsIndexRouteImport } from './routes/_app.settings.departments.index'
+import { Route as AppSettingsCommendationsIndexRouteImport } from './routes/_app.settings.commendations.index'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -45,6 +53,51 @@ const AppEmployeesIdRoute = AppEmployeesIdRouteImport.update({
   path: '/employees/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsSalaryIndexRoute = AppSettingsSalaryIndexRouteImport.update({
+  id: '/settings/salary/',
+  path: '/settings/salary/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsPreferencesIndexRoute =
+  AppSettingsPreferencesIndexRouteImport.update({
+    id: '/settings/preferences/',
+    path: '/settings/preferences/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSettingsPenaltiesIndexRoute =
+  AppSettingsPenaltiesIndexRouteImport.update({
+    id: '/settings/penalties/',
+    path: '/settings/penalties/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSettingsLegalIndexRoute = AppSettingsLegalIndexRouteImport.update({
+  id: '/settings/legal/',
+  path: '/settings/legal/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsLeavesIndexRoute = AppSettingsLeavesIndexRouteImport.update({
+  id: '/settings/leaves/',
+  path: '/settings/leaves/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsJobTitlesIndexRoute =
+  AppSettingsJobTitlesIndexRouteImport.update({
+    id: '/settings/job-titles/',
+    path: '/settings/job-titles/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSettingsDepartmentsIndexRoute =
+  AppSettingsDepartmentsIndexRouteImport.update({
+    id: '/settings/departments/',
+    path: '/settings/departments/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSettingsCommendationsIndexRoute =
+  AppSettingsCommendationsIndexRouteImport.update({
+    id: '/settings/commendations/',
+    path: '/settings/commendations/',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -52,6 +105,14 @@ export interface FileRoutesByFullPath {
   '/analytics/': typeof AppAnalyticsIndexRoute
   '/employees/': typeof AppEmployeesIndexRoute
   '/reports/': typeof AppReportsIndexRoute
+  '/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
+  '/settings/departments/': typeof AppSettingsDepartmentsIndexRoute
+  '/settings/job-titles/': typeof AppSettingsJobTitlesIndexRoute
+  '/settings/leaves/': typeof AppSettingsLeavesIndexRoute
+  '/settings/legal/': typeof AppSettingsLegalIndexRoute
+  '/settings/penalties/': typeof AppSettingsPenaltiesIndexRoute
+  '/settings/preferences/': typeof AppSettingsPreferencesIndexRoute
+  '/settings/salary/': typeof AppSettingsSalaryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
@@ -59,6 +120,14 @@ export interface FileRoutesByTo {
   '/analytics': typeof AppAnalyticsIndexRoute
   '/employees': typeof AppEmployeesIndexRoute
   '/reports': typeof AppReportsIndexRoute
+  '/settings/commendations': typeof AppSettingsCommendationsIndexRoute
+  '/settings/departments': typeof AppSettingsDepartmentsIndexRoute
+  '/settings/job-titles': typeof AppSettingsJobTitlesIndexRoute
+  '/settings/leaves': typeof AppSettingsLeavesIndexRoute
+  '/settings/legal': typeof AppSettingsLegalIndexRoute
+  '/settings/penalties': typeof AppSettingsPenaltiesIndexRoute
+  '/settings/preferences': typeof AppSettingsPreferencesIndexRoute
+  '/settings/salary': typeof AppSettingsSalaryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,6 +137,14 @@ export interface FileRoutesById {
   '/_app/analytics/': typeof AppAnalyticsIndexRoute
   '/_app/employees/': typeof AppEmployeesIndexRoute
   '/_app/reports/': typeof AppReportsIndexRoute
+  '/_app/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
+  '/_app/settings/departments/': typeof AppSettingsDepartmentsIndexRoute
+  '/_app/settings/job-titles/': typeof AppSettingsJobTitlesIndexRoute
+  '/_app/settings/leaves/': typeof AppSettingsLeavesIndexRoute
+  '/_app/settings/legal/': typeof AppSettingsLegalIndexRoute
+  '/_app/settings/penalties/': typeof AppSettingsPenaltiesIndexRoute
+  '/_app/settings/preferences/': typeof AppSettingsPreferencesIndexRoute
+  '/_app/settings/salary/': typeof AppSettingsSalaryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -77,8 +154,29 @@ export interface FileRouteTypes {
     | '/analytics/'
     | '/employees/'
     | '/reports/'
+    | '/settings/commendations/'
+    | '/settings/departments/'
+    | '/settings/job-titles/'
+    | '/settings/leaves/'
+    | '/settings/legal/'
+    | '/settings/penalties/'
+    | '/settings/preferences/'
+    | '/settings/salary/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/employees/$id' | '/analytics' | '/employees' | '/reports'
+  to:
+    | '/'
+    | '/employees/$id'
+    | '/analytics'
+    | '/employees'
+    | '/reports'
+    | '/settings/commendations'
+    | '/settings/departments'
+    | '/settings/job-titles'
+    | '/settings/leaves'
+    | '/settings/legal'
+    | '/settings/penalties'
+    | '/settings/preferences'
+    | '/settings/salary'
   id:
     | '__root__'
     | '/_app'
@@ -87,6 +185,14 @@ export interface FileRouteTypes {
     | '/_app/analytics/'
     | '/_app/employees/'
     | '/_app/reports/'
+    | '/_app/settings/commendations/'
+    | '/_app/settings/departments/'
+    | '/_app/settings/job-titles/'
+    | '/_app/settings/leaves/'
+    | '/_app/settings/legal/'
+    | '/_app/settings/penalties/'
+    | '/_app/settings/preferences/'
+    | '/_app/settings/salary/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,6 +243,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEmployeesIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings/salary/': {
+      id: '/_app/settings/salary/'
+      path: '/settings/salary'
+      fullPath: '/settings/salary/'
+      preLoaderRoute: typeof AppSettingsSalaryIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/preferences/': {
+      id: '/_app/settings/preferences/'
+      path: '/settings/preferences'
+      fullPath: '/settings/preferences/'
+      preLoaderRoute: typeof AppSettingsPreferencesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/penalties/': {
+      id: '/_app/settings/penalties/'
+      path: '/settings/penalties'
+      fullPath: '/settings/penalties/'
+      preLoaderRoute: typeof AppSettingsPenaltiesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/legal/': {
+      id: '/_app/settings/legal/'
+      path: '/settings/legal'
+      fullPath: '/settings/legal/'
+      preLoaderRoute: typeof AppSettingsLegalIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/leaves/': {
+      id: '/_app/settings/leaves/'
+      path: '/settings/leaves'
+      fullPath: '/settings/leaves/'
+      preLoaderRoute: typeof AppSettingsLeavesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/job-titles/': {
+      id: '/_app/settings/job-titles/'
+      path: '/settings/job-titles'
+      fullPath: '/settings/job-titles/'
+      preLoaderRoute: typeof AppSettingsJobTitlesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/departments/': {
+      id: '/_app/settings/departments/'
+      path: '/settings/departments'
+      fullPath: '/settings/departments/'
+      preLoaderRoute: typeof AppSettingsDepartmentsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/commendations/': {
+      id: '/_app/settings/commendations/'
+      path: '/settings/commendations'
+      fullPath: '/settings/commendations/'
+      preLoaderRoute: typeof AppSettingsCommendationsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -146,6 +308,14 @@ interface AppRouteChildren {
   AppAnalyticsIndexRoute: typeof AppAnalyticsIndexRoute
   AppEmployeesIndexRoute: typeof AppEmployeesIndexRoute
   AppReportsIndexRoute: typeof AppReportsIndexRoute
+  AppSettingsCommendationsIndexRoute: typeof AppSettingsCommendationsIndexRoute
+  AppSettingsDepartmentsIndexRoute: typeof AppSettingsDepartmentsIndexRoute
+  AppSettingsJobTitlesIndexRoute: typeof AppSettingsJobTitlesIndexRoute
+  AppSettingsLeavesIndexRoute: typeof AppSettingsLeavesIndexRoute
+  AppSettingsLegalIndexRoute: typeof AppSettingsLegalIndexRoute
+  AppSettingsPenaltiesIndexRoute: typeof AppSettingsPenaltiesIndexRoute
+  AppSettingsPreferencesIndexRoute: typeof AppSettingsPreferencesIndexRoute
+  AppSettingsSalaryIndexRoute: typeof AppSettingsSalaryIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -154,6 +324,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsIndexRoute: AppAnalyticsIndexRoute,
   AppEmployeesIndexRoute: AppEmployeesIndexRoute,
   AppReportsIndexRoute: AppReportsIndexRoute,
+  AppSettingsCommendationsIndexRoute: AppSettingsCommendationsIndexRoute,
+  AppSettingsDepartmentsIndexRoute: AppSettingsDepartmentsIndexRoute,
+  AppSettingsJobTitlesIndexRoute: AppSettingsJobTitlesIndexRoute,
+  AppSettingsLeavesIndexRoute: AppSettingsLeavesIndexRoute,
+  AppSettingsLegalIndexRoute: AppSettingsLegalIndexRoute,
+  AppSettingsPenaltiesIndexRoute: AppSettingsPenaltiesIndexRoute,
+  AppSettingsPreferencesIndexRoute: AppSettingsPreferencesIndexRoute,
+  AppSettingsSalaryIndexRoute: AppSettingsSalaryIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
