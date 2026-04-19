@@ -29,20 +29,17 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "نظام إدارة الموارد البشرية | HR Iraq" },
+      { name: "description", content: "نظام متكامل لإدارة الموارد البشرية وفق القوانين العراقية - الخدمة المدنية، الملاك، الرواتب، الانضباط، التقاعد، والعمل" },
+      { property: "og:title", content: "نظام إدارة الموارد البشرية" },
+      { property: "og:description", content: "إدارة شاملة للموظفين، الإجازات، العقوبات، الترقيات والعلاوات وفق التشريعات العراقية" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -52,7 +49,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
