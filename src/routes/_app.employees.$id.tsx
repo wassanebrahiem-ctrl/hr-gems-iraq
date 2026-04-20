@@ -29,6 +29,8 @@ function EmployeeDetail() {
   const [commendationTypes] = useCommendationTypes();
   const [leaves, setLeaves] = useLeaveRecords();
   const [leaveTypes] = useLeaveTypes();
+  const [profiles] = useEmployeeProfiles();
+  const [documents] = useEmployeeDocuments();
 
   const [openLeave, setOpenLeave] = useState(false);
   const [openPen, setOpenPen] = useState(false);
