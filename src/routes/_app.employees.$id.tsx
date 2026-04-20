@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Building2, Briefcase, Plus } from "lucide-react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary } from "@/lib/data-init";
+import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, monthsToRetirement, ageInYears, formatYM, formatDateAR, baseSalary, formatIQD } from "@/lib/calc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { uid } from "@/lib/storage";
@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { EmployeeProfileCard } from "@/components/employee/EmployeeProfileCard";
+import { EmployeeDocuments } from "@/components/employee/EmployeeDocuments";
 
 export const Route = createFileRoute("/_app/employees/$id")({
   component: EmployeeDetail,
