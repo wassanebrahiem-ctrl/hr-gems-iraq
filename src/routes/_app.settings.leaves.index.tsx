@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { CalendarDays, Plus, Trash2, Pencil, Search } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -35,11 +40,19 @@ function LeavesSettings() {
 
   const filtered = types.filter((t) => !q || t.name.includes(q) || t.code.includes(q));
 
+  const [delId, setDelId] = useState<string | null>(null);
+
   function save(t: LeaveType) {
     setTypes((p) => edit ? p.map((x) => x.id === t.id ? t : x) : [...p, t]);
+    toast.success(edit ? "تم تحديث الإجازة" : "تمت إضافة الإجازة");
     setOpen(false); setEdit(null);
   }
-  function del(id: string) { if (confirm("حذف هذا النوع؟")) setTypes((p) => p.filter((x) => x.id !== id)); }
+  function confirmDel() {
+    if (!delId) return;
+    setTypes((p) => p.filter((x) => x.id !== delId));
+    toast.success("تم حذف نوع الإجازة");
+    setDelId(null);
+  }
 
   return (
     <div className="space-y-6">
@@ -83,7 +96,7 @@ function LeavesSettings() {
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <Button size="icon" variant="ghost" className="size-8 text-amber" onClick={() => { setEdit(t); setOpen(true); }}><Pencil className="size-4" /></Button>
-                      <Button size="icon" variant="ghost" className="size-8 text-destructive" onClick={() => del(t.id)}><Trash2 className="size-4" /></Button>
+                      <Button size="icon" variant="ghost" className="size-8 text-destructive" onClick={() => setDelId(t.id)}><Trash2 className="size-4" /></Button>
                     </div>
                   </td>
                 </tr>
@@ -94,14 +107,27 @@ function LeavesSettings() {
       </div>
 
       <LeaveDialog open={open} onOpenChange={setOpen} initial={edit} onSave={save} />
+
+      <AlertDialog open={!!delId} onOpenChange={(v) => !v && setDelId(null)}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
+            <AlertDialogDescription>هل أنت متأكد من حذف هذا النوع من الإجازات؟ لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDel} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">حذف</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
 
 function LeaveDialog({ open, onOpenChange, initial, onSave }: { open: boolean; onOpenChange: (v: boolean) => void; initial: LeaveType | null; onSave: (t: LeaveType) => void }) {
-  const [form, setForm] = useState<LeaveType>(initial || { id: uid("lt_"), name: "", code: "", category: "regular", daysPerYear: 30, paid: true, active: true, legalRef: "" });
-  // reset on open
-  useState(() => { if (initial) setForm(initial); });
+  const empty: LeaveType = { id: uid("lt_"), name: "", code: "", category: "regular", daysPerYear: 30, paid: true, active: true, legalRef: "" };
+  const [form, setForm] = useState<LeaveType>(initial || empty);
+  useEffect(() => { setForm(initial || { ...empty, id: uid("lt_") }); /* eslint-disable-next-line */ }, [initial, open]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent dir="rtl"><DialogHeader><DialogTitle>{initial ? "تعديل نوع إجازة" : "إضافة نوع إجازة"}</DialogTitle></DialogHeader>
