@@ -116,3 +116,80 @@ export interface SalaryGrade {
   grade: number; // 1-10
   stages: number[]; // base salary per stage (1..N)
 }
+
+// ============ Employee Dossier (الملف الشخصي) ============
+
+export type MaritalStatus = "single" | "married" | "divorced" | "widowed";
+export type BloodType = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+export type EducationLevel =
+  | "primary" | "intermediate" | "preparatory"
+  | "diploma" | "bachelor" | "higher_diploma" | "master" | "phd";
+
+export interface EmployeeProfile {
+  employeeId: string;
+  // Personal
+  motherName?: string;
+  maritalStatus?: MaritalStatus;
+  childrenCount?: number;
+  bloodType?: BloodType;
+  religion?: string;
+  nationality?: string;
+  // Identity / civil
+  civilStatusId?: string;     // رقم البطاقة المدنية
+  passportNo?: string;
+  residenceCardNo?: string;   // بطاقة السكن
+  // Address
+  governorate?: string;
+  district?: string;
+  address?: string;
+  // Contact
+  altPhone?: string;
+  email?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  emergencyContactRelation?: string;
+  // Education
+  educationLevel?: EducationLevel;
+  specialization?: string;
+  graduationYear?: number;
+  university?: string;
+  // Bank
+  bankName?: string;
+  bankAccount?: string;
+  iban?: string;
+  // Misc
+  avatarDataUrl?: string;     // base64 photo
+  bio?: string;
+  updatedAt: string;
+}
+
+export type DocumentCategory =
+  | "id"           // البطاقة الموحدة / الجنسية
+  | "civil"        // الأحوال المدنية
+  | "residence"    // بطاقة السكن
+  | "passport"     // جواز السفر
+  | "education"    // شهادات دراسية
+  | "appointment"  // أمر المباشرة / التعيين
+  | "promotion"    // أوامر الترقية
+  | "increment"    // أوامر العلاوة
+  | "leave"        // إجازات
+  | "penalty"      // عقوبات
+  | "commendation" // كتب شكر
+  | "medical"      // تقارير طبية
+  | "contract"     // عقود
+  | "other";       // أخرى
+
+export interface EmployeeDocument {
+  id: string;
+  employeeId: string;
+  category: DocumentCategory;
+  title: string;
+  fileName: string;
+  mimeType: string;
+  size: number;        // bytes
+  dataUrl: string;     // base64
+  issueDate?: string;
+  expiryDate?: string;
+  notes?: string;
+  createdAt: string;
+}

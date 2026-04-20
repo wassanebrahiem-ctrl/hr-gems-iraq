@@ -8,6 +8,7 @@ import {
 import type {
   Department, Employee, JobTitle, LeaveType, LeaveRecord,
   PenaltyType, PenaltyRecord, CommendationType, CommendationRecord, SalaryGrade,
+  EmployeeProfile, EmployeeDocument,
 } from "./types";
 
 export const useEmployees = () => useStore<Employee[]>("employees", SEED_EMPLOYEES);
@@ -22,3 +23,5 @@ export const useCommendationRecords = () => useStore<CommendationRecord[]>("comm
   { id: "cr1", employeeId: "e1", commendationTypeId: "c4", date: new Date(Date.now() - 30*86400000).toISOString().slice(0,10), reason: "أداء متميز خلال الربع الأخير", createdAt: new Date().toISOString() },
 ]);
 export const useSalary = () => useStore<SalaryGrade[]>("salary", SEED_SALARY);
+export const useEmployeeProfiles = () => useStore<EmployeeProfile[]>("employeeProfiles", []);
+export const useEmployeeDocuments = () => useStore<EmployeeDocument[]>("employeeDocuments", []);

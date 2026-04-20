@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Building2, Briefcase, Plus } from "lucide-react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary } from "@/lib/data-init";
+import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, monthsToRetirement, ageInYears, formatYM, formatDateAR, baseSalary, formatIQD } from "@/lib/calc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { uid } from "@/lib/storage";
@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { EmployeeProfileCard } from "@/components/employee/EmployeeProfileCard";
+import { EmployeeDocuments } from "@/components/employee/EmployeeDocuments";
 
 export const Route = createFileRoute("/_app/employees/$id")({
   component: EmployeeDetail,
@@ -27,6 +29,8 @@ function EmployeeDetail() {
   const [commendationTypes] = useCommendationTypes();
   const [leaves, setLeaves] = useLeaveRecords();
   const [leaveTypes] = useLeaveTypes();
+  const [profiles] = useEmployeeProfiles();
+  const [documents] = useEmployeeDocuments();
 
   const [openLeave, setOpenLeave] = useState(false);
   const [openPen, setOpenPen] = useState(false);
@@ -46,6 +50,8 @@ function EmployeeDetail() {
   const empLeaves = leaves.filter((l) => l.employeeId === e.id);
   const empPenalties = penalties.filter((p) => p.employeeId === e.id);
   const empCommend = commendations.filter((c) => c.employeeId === e.id);
+  const empDocs = documents.filter((d) => d.employeeId === e.id);
+  const profile = profiles.find((p) => p.employeeId === e.id);
   const salaryAmount = baseSalary(e, salary);
   const retMonths = monthsToRetirement(e.birthDate);
 
@@ -58,8 +64,10 @@ function EmployeeDetail() {
       {/* Profile header */}
       <div className="rounded-3xl gradient-hero p-6 md:p-8 text-primary-foreground shadow-elegant">
         <div className="flex flex-col md:flex-row gap-6 items-start">
-          <div className="size-24 rounded-3xl bg-amber text-amber-foreground font-extrabold text-3xl flex items-center justify-center shadow-glow shrink-0">
-            {e.fullName.slice(0, 2)}
+          <div className="size-24 rounded-3xl bg-amber text-amber-foreground font-extrabold text-3xl flex items-center justify-center shadow-glow shrink-0 overflow-hidden">
+            {profile?.avatarDataUrl
+              ? <img src={profile.avatarDataUrl} alt={e.fullName} className="w-full h-full object-cover" />
+              : e.fullName.slice(0, 2)}
           </div>
           <div className="flex-1">
             <h1 className="text-2xl md:text-3xl font-extrabold">{e.fullName}</h1>
@@ -111,8 +119,14 @@ function EmployeeDetail() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="leaves" className="w-full">
-        <TabsList className="rounded-xl bg-card border border-border p-1 h-auto">
+      <Tabs defaultValue="profile" className="w-full">
+        <TabsList className="rounded-xl bg-card border border-border p-1 h-auto flex-wrap gap-1">
+          <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg gap-2">
+            <UserCircle className="size-4" /> الملف الشخصي
+          </TabsTrigger>
+          <TabsTrigger value="documents" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg gap-2">
+            <FileText className="size-4" /> المستمسكات ({empDocs.length})
+          </TabsTrigger>
           <TabsTrigger value="leaves" className="data-[state=active]:bg-info data-[state=active]:text-info-foreground rounded-lg gap-2">
             <CalendarDays className="size-4" /> الإجازات ({empLeaves.length})
           </TabsTrigger>
@@ -123,6 +137,16 @@ function EmployeeDetail() {
             <Award className="size-4" /> كتب الشكر ({empCommend.length})
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="profile" className="mt-4">
+          <EmployeeProfileCard employeeId={e.id} />
+        </TabsContent>
+
+        <TabsContent value="documents" className="mt-4">
+          <SectionShell title="مستمسكات الموظف">
+            <EmployeeDocuments employeeId={e.id} />
+          </SectionShell>
+        </TabsContent>
 
         <TabsContent value="leaves" className="mt-4">
           <SectionShell
