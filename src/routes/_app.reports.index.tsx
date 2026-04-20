@@ -393,7 +393,8 @@ function ReportRow({ report, badge, onOpen }: { report: ReportData; badge?: numb
 
 function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; onClose: () => void }) {
   if (!report) return null;
-  const Icon = report.icon;
+  const r = report;
+  const Icon = r.icon;
   const toneMap: Record<Tone, string> = {
     success: "bg-success text-primary-foreground",
     info: "bg-info text-primary-foreground",
@@ -403,12 +404,12 @@ function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; o
   };
 
   function handleExport() {
-    if (!report.rows.length) {
+    if (!r.rows.length) {
       toast.error("لا توجد بيانات للتصدير");
       return;
     }
-    const filename = `${report.key}-${new Date().toISOString().slice(0, 10)}.csv`;
-    downloadCSV(filename, report.columns, report.rows);
+    const filename = `${r.key}-${new Date().toISOString().slice(0, 10)}.csv`;
+    downloadCSV(filename, r.columns, r.rows);
     toast.success("تم التصدير بنجاح", { description: filename });
   }
 
