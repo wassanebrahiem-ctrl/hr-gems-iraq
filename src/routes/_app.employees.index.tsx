@@ -125,7 +125,7 @@ function EmployeesPage() {
           <Filter className="size-4 text-muted-foreground self-center ml-1" />
           <span className="text-xs text-muted-foreground self-center">فلترة سريعة:</span>
           <FilterPill active={filter === "all"} onClick={() => setFilter("all")} count={counts.all}>الكل</FilterPill>
-          <FilterPill active={filter === "active"} onClick={() => setFilter("active")} count={counts.active} tone="success">على رأس العمل</FilterPill>
+          <FilterPill active={filter === "active"} onClick={() => setFilter("active")} count={counts.active} tone="success">مستمر</FilterPill>
           <FilterPill active={filter === "leave"} onClick={() => setFilter("leave")} count={counts.leave} tone="info">في إجازة</FilterPill>
           <FilterPill active={filter === "increment"} onClick={() => setFilter("increment")} count={counts.increment} tone="amber">مستحق العلاوة</FilterPill>
           <FilterPill active={filter === "promotion"} onClick={() => setFilter("promotion")} count={counts.promotion} tone="warning">مستحق الترقية</FilterPill>
@@ -243,10 +243,14 @@ function FilterPill({ children, active, onClick, count, tone = "primary" }: {
 function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean }) {
   if (onLeave) return <Badge tone="info">في إجازة</Badge>;
   if (status === "retired") return <Badge tone="muted">متقاعد</Badge>;
-  if (status === "terminated") return <Badge tone="destructive">منفصل</Badge>;
-  if (status === "suspended") return <Badge tone="warning">موقوف</Badge>;
+  if (status === "dismissed") return <Badge tone="destructive">مفصول</Badge>;
+  if (status === "contract_ended") return <Badge tone="destructive">انهاء عقد</Badge>;
+  if (status === "resigned") return <Badge tone="warning">مستقيل</Badge>;
+  if (status === "deceased") return <Badge tone="muted">متوفي</Badge>;
+  if (status === "seconded") return <Badge tone="info">منسب</Badge>;
+  if (status === "assigned") return <Badge tone="info">تكليف</Badge>;
   if (nearRet) return <Badge tone="warning">قرب التقاعد</Badge>;
-  return <Badge tone="success">على رأس العمل</Badge>;
+  return <Badge tone="success">مستمر</Badge>;
 }
 
 function Badge({ children, tone }: { children: React.ReactNode; tone: "success" | "info" | "warning" | "destructive" | "muted" }) {
