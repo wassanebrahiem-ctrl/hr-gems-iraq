@@ -106,11 +106,14 @@ export function EmployeeFormDialog({ open, onOpenChange, employee, onSave }: Pro
             <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as Employee["status"] })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">على رأس العمل</SelectItem>
-                <SelectItem value="leave">في إجازة</SelectItem>
-                <SelectItem value="suspended">موقوف</SelectItem>
+                <SelectItem value="active">مستمر</SelectItem>
+                <SelectItem value="seconded">منسب</SelectItem>
+                <SelectItem value="assigned">تكليف</SelectItem>
                 <SelectItem value="retired">متقاعد</SelectItem>
-                <SelectItem value="terminated">منفصل</SelectItem>
+                <SelectItem value="dismissed">مفصول</SelectItem>
+                <SelectItem value="contract_ended">انهاء عقد</SelectItem>
+                <SelectItem value="resigned">مستقيل</SelectItem>
+                <SelectItem value="deceased">متوفي</SelectItem>
               </SelectContent>
             </Select>
           </Field>
