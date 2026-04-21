@@ -1,18 +1,21 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { useMemo, useRef, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, monthsToRetirement, ageInYears, formatYM, formatDateAR, baseSalary, formatIQD } from "@/lib/calc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { uid } from "@/lib/storage";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { EmployeeProfileCard } from "@/components/employee/EmployeeProfileCard";
 import { EmployeeDocuments } from "@/components/employee/EmployeeDocuments";
+import { toast } from "sonner";
+import type { LeaveRecord, PenaltyRecord, CommendationRecord } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/employees/$id")({
   component: EmployeeDetail,
@@ -33,8 +36,12 @@ function EmployeeDetail() {
   const [documents] = useEmployeeDocuments();
 
   const [openLeave, setOpenLeave] = useState(false);
+  const [editLeave, setEditLeave] = useState<LeaveRecord | null>(null);
   const [openPen, setOpenPen] = useState(false);
+  const [editPen, setEditPen] = useState<PenaltyRecord | null>(null);
   const [openCom, setOpenCom] = useState(false);
+  const [editCom, setEditCom] = useState<CommendationRecord | null>(null);
+  const [confirmDel, setConfirmDel] = useState<{ kind: "leave" | "pen" | "com"; id: string } | null>(null);
 
   const e = employees.find((x) => x.id === id);
   const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
@@ -54,6 +61,14 @@ function EmployeeDetail() {
   const profile = profiles.find((p) => p.employeeId === e.id);
   const salaryAmount = baseSalary(e, salary);
   const retMonths = monthsToRetirement(e.birthDate);
+
+  function confirmDelete() {
+    if (!confirmDel) return;
+    if (confirmDel.kind === "leave") { setLeaves((p) => p.filter((x) => x.id !== confirmDel.id)); toast.success("تم حذف الإجازة"); }
+    if (confirmDel.kind === "pen") { setPenalties((p) => p.filter((x) => x.id !== confirmDel.id)); toast.success("تم حذف العقوبة"); }
+    if (confirmDel.kind === "com") { setCommendations((p) => p.filter((x) => x.id !== confirmDel.id)); toast.success("تم حذف كتاب الشكر"); }
+    setConfirmDel(null);
+  }
 
   return (
     <div className="space-y-6">
@@ -156,7 +171,7 @@ function EmployeeDetail() {
             {empLeaves.length === 0 ? <Empty msg="لا توجد إجازات مسجلة" /> : (
               <RecordTable rows={empLeaves.map((l) => {
                 const t = leaveTypes.find((x) => x.id === l.leaveTypeId);
-                return { left: t?.name || "—", mid: `${formatDateAR(l.startDate)} → ${formatDateAR(l.endDate)}`, right: `${l.days} يوم`, status: l.status === "approved" ? "موافق عليها" : l.status === "pending" ? "قيد الموافقة" : "مرفوضة", reason: l.reason };
+                return { left: t?.name || "—", mid: `${formatDateAR(l.startDate)} → ${formatDateAR(l.endDate)}`, right: `${l.days} يوم`, status: l.status === "approved" ? "موافق عليها" : l.status === "pending" ? "قيد الموافقة" : "مرفوضة", reason: l.reason, onEdit: () => setEditLeave(l), onDelete: () => setConfirmDel({ kind: "leave", id: l.id }) };
               })} />
             )}
           </SectionShell>
@@ -170,7 +185,7 @@ function EmployeeDetail() {
             {empPenalties.length === 0 ? <Empty msg="لا توجد عقوبات مسجلة" /> : (
               <RecordTable rows={empPenalties.map((p) => {
                 const t = penaltyTypes.find((x) => x.id === p.penaltyTypeId);
-                return { left: t?.name || "—", mid: formatDateAR(p.date), right: `تأخير ${t?.promotionDelayMonths} شهر`, status: p.active ? "سارية" : "منتهية", reason: p.reason };
+                return { left: t?.name || "—", mid: formatDateAR(p.date), right: `تأخير ${t?.promotionDelayMonths} شهر`, status: p.active ? "سارية" : "منتهية", reason: p.reason, onEdit: () => setEditPen(p), onDelete: () => setConfirmDel({ kind: "pen", id: p.id }) };
               })} />
             )}
           </SectionShell>
@@ -184,17 +199,66 @@ function EmployeeDetail() {
             {empCommend.length === 0 ? <Empty msg="لا توجد كتب شكر مسجلة" /> : (
               <RecordTable rows={empCommend.map((c) => {
                 const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-                return { left: t?.name || "—", mid: formatDateAR(c.date), right: `قدم +${t?.seniorityBonusMonths} شهر`, status: "ساري", reason: c.reason };
+                return { left: t?.name || "—", mid: formatDateAR(c.date), right: `قدم +${t?.seniorityBonusMonths} شهر`, status: "ساري", reason: c.reason, onEdit: () => setEditCom(c), onDelete: () => setConfirmDel({ kind: "com", id: c.id }) };
               })} />
             )}
           </SectionShell>
         </TabsContent>
       </Tabs>
 
-      {/* Add dialogs */}
-      <AddLeaveDialog open={openLeave} onOpenChange={setOpenLeave} employeeId={e.id} onAdd={(rec) => setLeaves((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
-      <AddPenaltyDialog open={openPen} onOpenChange={setOpenPen} employeeId={e.id} onAdd={(rec) => setPenalties((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
-      <AddCommendDialog open={openCom} onOpenChange={setOpenCom} employeeId={e.id} onAdd={(rec) => setCommendations((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
+      {/* Add/Edit dialogs */}
+      <LeaveDialog
+        open={openLeave || !!editLeave}
+        onOpenChange={(v) => { if (!v) { setOpenLeave(false); setEditLeave(null); } }}
+        employeeId={e.id}
+        initial={editLeave}
+        onSave={(rec) => {
+          setLeaves((p) => {
+            const exists = p.some((x) => x.id === rec.id);
+            return exists ? p.map((x) => x.id === rec.id ? rec : x) : [rec, ...p];
+          });
+          toast.success(editLeave ? "تم تحديث الإجازة" : "تم منح الإجازة");
+        }}
+      />
+      <PenaltyDialog
+        open={openPen || !!editPen}
+        onOpenChange={(v) => { if (!v) { setOpenPen(false); setEditPen(null); } }}
+        employeeId={e.id}
+        initial={editPen}
+        onSave={(rec) => {
+          setPenalties((p) => {
+            const exists = p.some((x) => x.id === rec.id);
+            return exists ? p.map((x) => x.id === rec.id ? rec : x) : [rec, ...p];
+          });
+          toast.success(editPen ? "تم تحديث العقوبة" : "تم تسجيل العقوبة");
+        }}
+      />
+      <CommendDialog
+        open={openCom || !!editCom}
+        onOpenChange={(v) => { if (!v) { setOpenCom(false); setEditCom(null); } }}
+        employeeId={e.id}
+        initial={editCom}
+        onSave={(rec) => {
+          setCommendations((p) => {
+            const exists = p.some((x) => x.id === rec.id);
+            return exists ? p.map((x) => x.id === rec.id ? rec : x) : [rec, ...p];
+          });
+          toast.success(editCom ? "تم تحديث كتاب الشكر" : "تم منح كتاب الشكر");
+        }}
+      />
+
+      <AlertDialog open={!!confirmDel} onOpenChange={(v) => !v && setConfirmDel(null)}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
+            <AlertDialogDescription>هل أنت متأكد من حذف هذا السجل؟ لا يمكن التراجع.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">حذف</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -231,7 +295,9 @@ function SectionShell({ title, action, children }: { title: string; action?: Rea
   );
 }
 function Empty({ msg }: { msg: string }) { return <p className="text-sm text-muted-foreground text-center py-8">{msg}</p>; }
-function RecordTable({ rows }: { rows: { left: string; mid: string; right: string; status: string; reason?: string }[] }) {
+
+type Row = { left: string; mid: string; right: string; status: string; reason?: string; onEdit?: () => void; onDelete?: () => void };
+function RecordTable({ rows }: { rows: Row[] }) {
   return (
     <div className="divide-y divide-border">
       {rows.map((r, i) => (
@@ -241,6 +307,16 @@ function RecordTable({ rows }: { rows: { left: string; mid: string; right: strin
             <div className="text-muted-foreground arabic-num">{r.mid}</div>
             <div className="text-muted-foreground arabic-num">{r.right}</div>
             <div className="text-xs font-semibold px-2 py-0.5 rounded-full bg-muted">{r.status}</div>
+            {r.onEdit && (
+              <Button variant="ghost" size="icon" className="size-8" onClick={r.onEdit} aria-label="تعديل">
+                <Pencil className="size-4" />
+              </Button>
+            )}
+            {r.onDelete && (
+              <Button variant="ghost" size="icon" className="size-8 text-destructive hover:text-destructive" onClick={r.onDelete} aria-label="حذف">
+                <Trash2 className="size-4" />
+              </Button>
+            )}
           </div>
           {r.reason && <div className="text-xs text-muted-foreground mt-1">السبب: {r.reason}</div>}
         </div>
@@ -249,23 +325,38 @@ function RecordTable({ rows }: { rows: { left: string; mid: string; right: strin
   );
 }
 
-function AddLeaveDialog({ open, onOpenChange, employeeId, onAdd }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; onAdd: (r: import("@/lib/types").LeaveRecord) => void }) {
+function LeaveDialog({ open, onOpenChange, employeeId, initial, onSave }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; initial: LeaveRecord | null; onSave: (r: LeaveRecord) => void }) {
   const [leaveTypes] = useLeaveTypes();
   const [typeId, setTypeId] = useState("");
-  const [start, setStart] = useState(""); const [end, setEnd] = useState(""); const [reason, setReason] = useState("");
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [reason, setReason] = useState("");
   const submittingRef = useRef(false);
-  function reset() { setTypeId(""); setStart(""); setEnd(""); setReason(""); submittingRef.current = false; }
+
+  useEffect(() => {
+    if (!open) return;
+    submittingRef.current = false;
+    if (initial) {
+      setTypeId(initial.leaveTypeId); setStart(initial.startDate); setEnd(initial.endDate); setReason(initial.reason || "");
+    } else {
+      setTypeId(""); setStart(""); setEnd(""); setReason("");
+    }
+  }, [open, initial]);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (submittingRef.current) return;
     submittingRef.current = true;
     const days = Math.max(1, Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86400000) + 1);
-    onAdd({ id: uid("lv_"), employeeId, leaveTypeId: typeId, startDate: start, endDate: end, days, reason, status: "approved", createdAt: new Date().toISOString() });
-    onOpenChange(false); reset();
+    const rec: LeaveRecord = initial
+      ? { ...initial, leaveTypeId: typeId, startDate: start, endDate: end, days, reason }
+      : { id: uid("lv_"), employeeId, leaveTypeId: typeId, startDate: start, endDate: end, days, reason, status: "approved", createdAt: new Date().toISOString() };
+    onSave(rec);
+    onOpenChange(false);
   }
   return (
-    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
-      <DialogContent dir="rtl"><DialogHeader><DialogTitle>منح إجازة</DialogTitle></DialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent dir="rtl"><DialogHeader><DialogTitle>{initial ? "تعديل الإجازة" : "منح إجازة"}</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع الإجازة</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر النوع" /></SelectTrigger><SelectContent>{leaveTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent></Select></div>
           <div className="grid grid-cols-2 gap-3">
@@ -280,27 +371,44 @@ function AddLeaveDialog({ open, onOpenChange, employeeId, onAdd }: { open: boole
   );
 }
 
-function AddPenaltyDialog({ open, onOpenChange, employeeId, onAdd }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; onAdd: (r: import("@/lib/types").PenaltyRecord) => void }) {
+function PenaltyDialog({ open, onOpenChange, employeeId, initial, onSave }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; initial: PenaltyRecord | null; onSave: (r: PenaltyRecord) => void }) {
   const [penaltyTypes] = usePenaltyTypes();
   const [typeId, setTypeId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reason, setReason] = useState("");
+  const [active, setActive] = useState(true);
   const submittingRef = useRef(false);
-  function reset() { setTypeId(""); setReason(""); submittingRef.current = false; }
+
+  useEffect(() => {
+    if (!open) return;
+    submittingRef.current = false;
+    if (initial) {
+      setTypeId(initial.penaltyTypeId); setDate(initial.date); setReason(initial.reason || ""); setActive(initial.active);
+    } else {
+      setTypeId(""); setDate(new Date().toISOString().slice(0, 10)); setReason(""); setActive(true);
+    }
+  }, [open, initial]);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (submittingRef.current) return;
     submittingRef.current = true;
-    onAdd({ id: uid("pn_"), employeeId, penaltyTypeId: typeId, date, reason, active: true, createdAt: new Date().toISOString() });
-    onOpenChange(false); reset();
+    const rec: PenaltyRecord = initial
+      ? { ...initial, penaltyTypeId: typeId, date, reason, active }
+      : { id: uid("pn_"), employeeId, penaltyTypeId: typeId, date, reason, active: true, createdAt: new Date().toISOString() };
+    onSave(rec);
+    onOpenChange(false);
   }
   return (
-    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
-      <DialogContent dir="rtl"><DialogHeader><DialogTitle>تسجيل عقوبة</DialogTitle></DialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent dir="rtl"><DialogHeader><DialogTitle>{initial ? "تعديل العقوبة" : "تسجيل عقوبة"}</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع العقوبة</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر العقوبة" /></SelectTrigger><SelectContent>{penaltyTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name} (تأخير {t.promotionDelayMonths} شهر)</SelectItem>)}</SelectContent></Select></div>
           <div><Label>تاريخ العقوبة</Label><Input type="date" value={date} onChange={e => setDate(e.target.value)} required /></div>
           <div><Label>السبب</Label><Textarea rows={2} value={reason} onChange={e => setReason(e.target.value)} required /></div>
+          {initial && (
+            <div><Label>الحالة</Label><Select value={active ? "1" : "0"} onValueChange={(v) => setActive(v === "1")}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="1">سارية</SelectItem><SelectItem value="0">منتهية</SelectItem></SelectContent></Select></div>
+          )}
           <DialogFooter><Button type="submit" className="bg-destructive text-destructive-foreground">حفظ</Button></DialogFooter>
         </form>
       </DialogContent>
@@ -308,23 +416,36 @@ function AddPenaltyDialog({ open, onOpenChange, employeeId, onAdd }: { open: boo
   );
 }
 
-function AddCommendDialog({ open, onOpenChange, employeeId, onAdd }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; onAdd: (r: import("@/lib/types").CommendationRecord) => void }) {
+function CommendDialog({ open, onOpenChange, employeeId, initial, onSave }: { open: boolean; onOpenChange: (v: boolean) => void; employeeId: string; initial: CommendationRecord | null; onSave: (r: CommendationRecord) => void }) {
   const [comTypes] = useCommendationTypes();
   const [typeId, setTypeId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reason, setReason] = useState("");
   const submittingRef = useRef(false);
-  function reset() { setTypeId(""); setReason(""); submittingRef.current = false; }
+
+  useEffect(() => {
+    if (!open) return;
+    submittingRef.current = false;
+    if (initial) {
+      setTypeId(initial.commendationTypeId); setDate(initial.date); setReason(initial.reason || "");
+    } else {
+      setTypeId(""); setDate(new Date().toISOString().slice(0, 10)); setReason("");
+    }
+  }, [open, initial]);
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (submittingRef.current) return;
     submittingRef.current = true;
-    onAdd({ id: uid("co_"), employeeId, commendationTypeId: typeId, date, reason, createdAt: new Date().toISOString() });
-    onOpenChange(false); reset();
+    const rec: CommendationRecord = initial
+      ? { ...initial, commendationTypeId: typeId, date, reason }
+      : { id: uid("co_"), employeeId, commendationTypeId: typeId, date, reason, createdAt: new Date().toISOString() };
+    onSave(rec);
+    onOpenChange(false);
   }
   return (
-    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
-      <DialogContent dir="rtl"><DialogHeader><DialogTitle>منح كتاب شكر</DialogTitle></DialogHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent dir="rtl"><DialogHeader><DialogTitle>{initial ? "تعديل كتاب الشكر" : "منح كتاب شكر"}</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع الكتاب</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر النوع" /></SelectTrigger><SelectContent>{comTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name} (+{t.seniorityBonusMonths} شهر قدم)</SelectItem>)}</SelectContent></Select></div>
           <div><Label>التاريخ</Label><Input type="date" value={date} onChange={e => setDate(e.target.value)} required /></div>
