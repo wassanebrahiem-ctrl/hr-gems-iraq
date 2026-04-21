@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
@@ -253,14 +253,18 @@ function AddLeaveDialog({ open, onOpenChange, employeeId, onAdd }: { open: boole
   const [leaveTypes] = useLeaveTypes();
   const [typeId, setTypeId] = useState("");
   const [start, setStart] = useState(""); const [end, setEnd] = useState(""); const [reason, setReason] = useState("");
+  const submittingRef = useRef(false);
+  function reset() { setTypeId(""); setStart(""); setEnd(""); setReason(""); submittingRef.current = false; }
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     const days = Math.max(1, Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86400000) + 1);
     onAdd({ id: uid("lv_"), employeeId, leaveTypeId: typeId, startDate: start, endDate: end, days, reason, status: "approved", createdAt: new Date().toISOString() });
-    onOpenChange(false); setTypeId(""); setStart(""); setEnd(""); setReason("");
+    onOpenChange(false); reset();
   }
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
       <DialogContent dir="rtl"><DialogHeader><DialogTitle>منح إجازة</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع الإجازة</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر النوع" /></SelectTrigger><SelectContent>{leaveTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent></Select></div>
@@ -281,13 +285,17 @@ function AddPenaltyDialog({ open, onOpenChange, employeeId, onAdd }: { open: boo
   const [typeId, setTypeId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reason, setReason] = useState("");
+  const submittingRef = useRef(false);
+  function reset() { setTypeId(""); setReason(""); submittingRef.current = false; }
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     onAdd({ id: uid("pn_"), employeeId, penaltyTypeId: typeId, date, reason, active: true, createdAt: new Date().toISOString() });
-    onOpenChange(false); setTypeId(""); setReason("");
+    onOpenChange(false); reset();
   }
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
       <DialogContent dir="rtl"><DialogHeader><DialogTitle>تسجيل عقوبة</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع العقوبة</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر العقوبة" /></SelectTrigger><SelectContent>{penaltyTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name} (تأخير {t.promotionDelayMonths} شهر)</SelectItem>)}</SelectContent></Select></div>
@@ -305,13 +313,17 @@ function AddCommendDialog({ open, onOpenChange, employeeId, onAdd }: { open: boo
   const [typeId, setTypeId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reason, setReason] = useState("");
+  const submittingRef = useRef(false);
+  function reset() { setTypeId(""); setReason(""); submittingRef.current = false; }
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     onAdd({ id: uid("co_"), employeeId, commendationTypeId: typeId, date, reason, createdAt: new Date().toISOString() });
-    onOpenChange(false); setTypeId(""); setReason("");
+    onOpenChange(false); reset();
   }
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) reset(); }}>
       <DialogContent dir="rtl"><DialogHeader><DialogTitle>منح كتاب شكر</DialogTitle></DialogHeader>
         <form onSubmit={submit} className="space-y-4 py-3">
           <div><Label>نوع الكتاب</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر النوع" /></SelectTrigger><SelectContent>{comTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name} (+{t.seniorityBonusMonths} شهر قدم)</SelectItem>)}</SelectContent></Select></div>
