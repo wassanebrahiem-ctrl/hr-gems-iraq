@@ -192,9 +192,9 @@ function EmployeeDetail() {
       </Tabs>
 
       {/* Add dialogs */}
-      <AddLeaveDialog open={openLeave} onOpenChange={setOpenLeave} employeeId={e.id} onAdd={(rec) => setLeaves((p) => [rec, ...p])} />
-      <AddPenaltyDialog open={openPen} onOpenChange={setOpenPen} employeeId={e.id} onAdd={(rec) => setPenalties((p) => [rec, ...p])} />
-      <AddCommendDialog open={openCom} onOpenChange={setOpenCom} employeeId={e.id} onAdd={(rec) => setCommendations((p) => [rec, ...p])} />
+      <AddLeaveDialog open={openLeave} onOpenChange={setOpenLeave} employeeId={e.id} onAdd={(rec) => setLeaves((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
+      <AddPenaltyDialog open={openPen} onOpenChange={setOpenPen} employeeId={e.id} onAdd={(rec) => setPenalties((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
+      <AddCommendDialog open={openCom} onOpenChange={setOpenCom} employeeId={e.id} onAdd={(rec) => setCommendations((p) => p.some((x) => x.id === rec.id) ? p : [rec, ...p])} />
     </div>
   );
 }
