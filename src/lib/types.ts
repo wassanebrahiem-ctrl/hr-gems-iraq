@@ -133,7 +133,9 @@ export interface CommendationRecord {
 
 export interface SalaryGrade {
   grade: number; // 1-10
-  stages: number[]; // base salary per stage (1..N)
+  stages: number[]; // base salary per stage (1..11)
+  annualIncrement: number; // العلاوة السنوية (ألف د.ع)
+  yearsPerIncrement: number; // عدد سنوات الخدمة لكل علاوة
 }
 
 // ============ Employee Dossier (الملف الشخصي) ============
