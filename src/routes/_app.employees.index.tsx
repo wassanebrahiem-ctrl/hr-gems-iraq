@@ -4,7 +4,7 @@ import { Users, Plus, Search, Filter, Eye, Pencil, Trash2, Calendar, AlertTriang
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords } from "@/lib/data-init";
+import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
@@ -25,6 +25,7 @@ function EmployeesPage() {
   const [commendations] = useCommendationRecords();
   const [commendationTypes] = useCommendationTypes();
   const [leaves] = useLeaveRecords();
+  const [leaveTypes] = useLeaveTypes();
 
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -32,12 +33,14 @@ function EmployeesPage() {
   const [open, setOpen] = useState(false);
 
   const enriched = useMemo(() => {
+    const today = new Date().toISOString().slice(0,10);
     return employees.map((e) => {
       const inc = incrementStatus(e);
       const pr = promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
-      const onLeave = leaves.some((l) => l.employeeId === e.id && l.status === "approved" && l.startDate <= new Date().toISOString().slice(0,10) && l.endDate >= new Date().toISOString().slice(0,10));
+      const currentLeave = leaves.find((l) => l.employeeId === e.id && l.status === "approved" && l.startDate <= today && l.endDate >= today);
+      const onLeave = !!currentLeave;
       const nearRet = isNearRetirement(e.birthDate, 12);
-      return { e, inc, pr, onLeave, nearRet };
+      return { e, inc, pr, onLeave, currentLeave, nearRet };
     });
   }, [employees, penalties, penaltyTypes, commendations, commendationTypes, leaves]);
 
@@ -180,6 +183,13 @@ function EmployeesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <StatusBadge status={x.e.status} onLeave={x.onLeave} nearRet={x.nearRet} />
+                      {x.currentLeave && (
+                        <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-info">
+                          <Calendar className="size-3" />
+                          <span className="font-semibold">{leaveTypes.find((lt) => lt.id === x.currentLeave!.leaveTypeId)?.name || "إجازة"}</span>
+                          <span className="text-muted-foreground arabic-num">· {formatDateAR(x.currentLeave.startDate)} → {formatDateAR(x.currentLeave.endDate)}</span>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
