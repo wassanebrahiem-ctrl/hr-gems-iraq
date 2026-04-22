@@ -4,11 +4,26 @@ import type {
   Department,
   Employee,
   JobTitle,
+  Position,
   LeaveType,
   PenaltyType,
   CommendationType,
   SalaryGrade,
 } from "./types";
+
+// المناصب الإدارية - منفصلة عن العناوين الوظيفية
+export const SEED_POSITIONS: Position[] = [
+  { id: "p_dg",   name: "مدير عام",            code: "DG",   level: "general_manager" },
+  { id: "p_adg",  name: "معاون مدير عام",      code: "ADG",  level: "general_manager" },
+  { id: "p_dept", name: "مدير قسم",            code: "DEPT", level: "department" },
+  { id: "p_adept",name: "معاون مدير قسم",      code: "ADEPT",level: "department" },
+  { id: "p_div",  name: "مسؤول شعبة",          code: "DIV",  level: "division" },
+  { id: "p_adiv", name: "معاون مسؤول شعبة",    code: "ADIV", level: "division" },
+  { id: "p_unit", name: "مسؤول وحدة",          code: "UNIT", level: "unit" },
+  { id: "p_team", name: "مسؤول فريق عمل",      code: "TEAM", level: "unit" },
+  { id: "p_sec",  name: "مقرر / سكرتير قسم",   code: "SEC",  level: "other" },
+];
+
 
 export const SEED_DEPARTMENTS: Department[] = [
   { id: "d1", name: "القسم المالي", code: "FIN" },
