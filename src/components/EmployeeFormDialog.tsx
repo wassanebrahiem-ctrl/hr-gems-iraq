@@ -90,15 +90,19 @@ export function EmployeeFormDialog({ open, onOpenChange, employee, onSave }: Pro
             </Select>
           </Field>
           <Field label="العنوان الوظيفي">
-            <Select value={form.jobTitle} onValueChange={(v) => setForm({ ...form, jobTitle: v })}>
-              <SelectTrigger><SelectValue placeholder="اختر عنواناً" /></SelectTrigger>
-              <SelectContent>
-                {jobTitles.map((j) => <SelectItem key={j.id} value={j.name}>{j.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <JobTitleCombobox
+              value={form.jobTitle}
+              onChange={(name, defaultGrade) =>
+                setForm((f) => ({
+                  ...f,
+                  jobTitle: name,
+                  grade: defaultGrade ?? f.grade,
+                }))
+              }
+            />
           </Field>
-          <Field label="الدرجة (1-10)">
-            <Input type="number" min={1} max={10} value={form.grade} onChange={(e) => setForm({ ...form, grade: Number(e.target.value) })} />
+          <Field label="الدرجة (1-11)">
+            <Input type="number" min={1} max={11} value={form.grade} onChange={(e) => setForm({ ...form, grade: Number(e.target.value) })} />
           </Field>
           <Field label="المرحلة (1-10)">
             <Input type="number" min={1} max={10} value={form.stage} onChange={(e) => setForm({ ...form, stage: Number(e.target.value) })} />
