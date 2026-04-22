@@ -222,3 +222,24 @@ function JobTitleCombobox({
     </Popover>
   );
 }
+
+function PositionSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (name: string) => void;
+}) {
+  const [positions] = usePositions();
+  return (
+    <Select value={value || "__none__"} onValueChange={(v) => onChange(v === "__none__" ? "" : v)}>
+      <SelectTrigger><SelectValue placeholder="بدون منصب إداري" /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="__none__">— بدون منصب —</SelectItem>
+        {positions.map((p) => (
+          <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
