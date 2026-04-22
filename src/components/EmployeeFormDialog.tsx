@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import type { Employee } from "@/lib/types";
-import { useDepartments, useJobTitles } from "@/lib/data-init";
+import { useDepartments, useJobTitles, usePositions } from "@/lib/data-init";
 import { uid } from "@/lib/storage";
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 
 const empty: Omit<Employee, "id" | "createdAt"> = {
   empNo: "", fullName: "", nationalId: "", phone: "", birthDate: "", gender: "male",
-  jobTitle: "", departmentId: "", grade: 7, stage: 1, startDate: "",
+  jobTitle: "", position: "", departmentId: "", grade: 7, stage: 1, startDate: "",
   status: "active", notes: "",
 };
 
