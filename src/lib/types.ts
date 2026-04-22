@@ -29,7 +29,8 @@ export interface Employee {
   phone: string;
   birthDate: string; // YYYY-MM-DD
   gender: "male" | "female";
-  jobTitle: string; // العنوان الوظيفي
+  jobTitle: string; // العنوان الوظيفي (مهندس، محاسب، قانوني...)
+  position?: string; // المنصب الإداري (مدير قسم، مسؤول شعبة...) - اختياري
   departmentId: string; // القسم
   grade: number; // الدرجة (1-10)
   stage: number; // المرحلة داخل الدرجة (1-10)
@@ -53,6 +54,26 @@ export interface JobTitle {
   code: string;
   defaultGrade?: number;   // الدرجة الافتراضية المرتبطة بالعنوان
   category?: string;       // التصنيف (هندسية، قانونية، إدارية...)
+}
+
+// المنصب الإداري (Administrative Position) - مختلف عن العنوان الوظيفي
+// أمثلة: مدير عام، مدير قسم، مسؤول شعبة، رئيس وحدة
+export type PositionLevel = "general_manager" | "department" | "division" | "unit" | "other";
+
+export const POSITION_LEVEL_LABELS: Record<PositionLevel, string> = {
+  general_manager: "مدير عام",
+  department: "مستوى قسم",
+  division: "مستوى شعبة",
+  unit: "مستوى وحدة",
+  other: "أخرى",
+};
+
+export interface Position {
+  id: string;
+  name: string;       // مدير قسم، مسؤول شعبة...
+  code: string;
+  level: PositionLevel;
+  notes?: string;
 }
 
 export type LeaveCategory =
