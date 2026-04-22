@@ -101,6 +101,12 @@ export function EmployeeFormDialog({ open, onOpenChange, employee, onSave }: Pro
               }
             />
           </Field>
+          <Field label="المنصب الإداري (اختياري)">
+            <PositionSelect
+              value={form.position || ""}
+              onChange={(name) => setForm((f) => ({ ...f, position: name }))}
+            />
+          </Field>
           <Field label="الدرجة (1-11)">
             <Input type="number" min={1} max={11} value={form.grade} onChange={(e) => setForm({ ...form, grade: Number(e.target.value) })} />
           </Field>

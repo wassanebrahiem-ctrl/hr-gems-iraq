@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import {
   LayoutDashboard, Users, FileText, BarChart3, UserCircle,
   Briefcase, Building2, DollarSign, CalendarDays, AlertTriangle,
-  Award, Database, Settings, Sparkles,
+  Award, Database, Settings, Sparkles, Crown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +32,7 @@ const groups: NavGroup[] = [
     label: "الإعدادات",
     items: [
       { title: "العناوين الوظيفية", to: "/settings/job-titles", icon: Briefcase },
+      { title: "المناصب الإدارية", to: "/settings/positions", icon: Crown },
       { title: "الأقسام", to: "/settings/departments", icon: Building2 },
       { title: "سلم الرواتب", to: "/settings/salary", icon: DollarSign },
       { title: "أنواع الإجازات", to: "/settings/leaves", icon: CalendarDays },
