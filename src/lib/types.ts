@@ -51,6 +51,8 @@ export interface JobTitle {
   id: string;
   name: string;
   code: string;
+  defaultGrade?: number;   // الدرجة الافتراضية المرتبطة بالعنوان
+  category?: string;       // التصنيف (هندسية، قانونية، إدارية...)
 }
 
 export type LeaveCategory =
