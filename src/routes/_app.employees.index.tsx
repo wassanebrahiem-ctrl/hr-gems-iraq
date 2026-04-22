@@ -165,7 +165,10 @@ function EmployeesPage() {
                         </div>
                         <div>
                           <div className="font-semibold">{x.e.fullName}</div>
-                          <div className="text-xs text-muted-foreground">{x.e.jobTitle}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {x.e.jobTitle}
+                            {x.e.position && <span className="text-amber font-bold"> · {x.e.position}</span>}
+                          </div>
                         </div>
                       </div>
                     </td>
