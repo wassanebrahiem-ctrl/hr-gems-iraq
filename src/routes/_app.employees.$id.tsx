@@ -87,6 +87,11 @@ function EmployeeDetail() {
           <div className="flex-1">
             <h1 className="text-2xl md:text-3xl font-extrabold">{e.fullName}</h1>
             <div className="text-primary-foreground/80 mt-1">{e.jobTitle} · {dept?.name}</div>
+            {e.position && (
+              <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full bg-amber/90 text-amber-foreground text-xs font-bold shadow-sm">
+                <Crown className="size-3.5" /> {e.position}
+              </div>
+            )}
             <div className="flex flex-wrap gap-3 mt-4 text-sm">
               <Chip icon={IdCard}>{e.empNo}</Chip>
               <Chip icon={Phone}>{e.phone}</Chip>
