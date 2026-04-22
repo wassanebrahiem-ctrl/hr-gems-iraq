@@ -148,3 +148,71 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
+
+function JobTitleCombobox({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (name: string, defaultGrade?: number) => void;
+}) {
+  const [jobTitles] = useJobTitles();
+  const [open, setOpen] = useState(false);
+
+  const groups = jobTitles.reduce<Record<string, typeof jobTitles>>((acc, j) => {
+    const k = j.category || "أخرى";
+    (acc[k] ||= []).push(j);
+    return acc;
+  }, {});
+
+  const selected = jobTitles.find((j) => j.name === value);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between font-normal"
+        >
+          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+            {selected ? `${selected.name} (د.${selected.defaultGrade})` : "اختر عنواناً وظيفياً..."}
+          </span>
+          <ChevronsUpDown className="size-4 opacity-50 shrink-0" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start" dir="rtl">
+        <Command
+          filter={(itemValue, search) =>
+            itemValue.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
+          }
+        >
+          <CommandInput placeholder="ابحث بالاسم أو التصنيف..." />
+          <CommandList className="max-h-72">
+            <CommandEmpty>لا توجد نتائج.</CommandEmpty>
+            {Object.entries(groups).map(([cat, items]) => (
+              <CommandGroup key={cat} heading={cat}>
+                {items.map((j) => (
+                  <CommandItem
+                    key={j.id}
+                    value={`${j.name} ${j.category ?? ""} ${j.code}`}
+                    onSelect={() => {
+                      onChange(j.name, j.defaultGrade);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check className={cn("ml-2 size-4", value === j.name ? "opacity-100" : "opacity-0")} />
+                    <span className="flex-1">{j.name}</span>
+                    <span className="text-xs text-muted-foreground arabic-num">د.{j.defaultGrade}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ))}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
