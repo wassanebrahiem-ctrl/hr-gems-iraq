@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import type { Employee } from "@/lib/types";
-import { useDepartments, useJobTitles } from "@/lib/data-init";
+import { useDepartments, useJobTitles, usePositions } from "@/lib/data-init";
 import { uid } from "@/lib/storage";
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 
 const empty: Omit<Employee, "id" | "createdAt"> = {
   empNo: "", fullName: "", nationalId: "", phone: "", birthDate: "", gender: "male",
-  jobTitle: "", departmentId: "", grade: 7, stage: 1, startDate: "",
+  jobTitle: "", position: "", departmentId: "", grade: 7, stage: 1, startDate: "",
   status: "active", notes: "",
 };
 
@@ -99,6 +99,12 @@ export function EmployeeFormDialog({ open, onOpenChange, employee, onSave }: Pro
                   grade: defaultGrade ?? f.grade,
                 }))
               }
+            />
+          </Field>
+          <Field label="المنصب الإداري (اختياري)">
+            <PositionSelect
+              value={form.position || ""}
+              onChange={(name) => setForm((f) => ({ ...f, position: name }))}
             />
           </Field>
           <Field label="الدرجة (1-11)">
@@ -214,5 +220,26 @@ function JobTitleCombobox({
         </Command>
       </PopoverContent>
     </Popover>
+  );
+}
+
+function PositionSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (name: string) => void;
+}) {
+  const [positions] = usePositions();
+  return (
+    <Select value={value || "__none__"} onValueChange={(v) => onChange(v === "__none__" ? "" : v)}>
+      <SelectTrigger><SelectValue placeholder="بدون منصب إداري" /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="__none__">— بدون منصب —</SelectItem>
+        {positions.map((p) => (
+          <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

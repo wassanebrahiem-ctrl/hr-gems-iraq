@@ -17,6 +17,7 @@ import { Route as AppAnalyticsIndexRouteImport } from './routes/_app.analytics.i
 import { Route as AppEmployeesIdRouteImport } from './routes/_app.employees.$id'
 import { Route as AppSettingsSalaryIndexRouteImport } from './routes/_app.settings.salary.index'
 import { Route as AppSettingsPreferencesIndexRouteImport } from './routes/_app.settings.preferences.index'
+import { Route as AppSettingsPositionsIndexRouteImport } from './routes/_app.settings.positions.index'
 import { Route as AppSettingsPenaltiesIndexRouteImport } from './routes/_app.settings.penalties.index'
 import { Route as AppSettingsLegalIndexRouteImport } from './routes/_app.settings.legal.index'
 import { Route as AppSettingsLeavesIndexRouteImport } from './routes/_app.settings.leaves.index'
@@ -62,6 +63,12 @@ const AppSettingsPreferencesIndexRoute =
   AppSettingsPreferencesIndexRouteImport.update({
     id: '/settings/preferences/',
     path: '/settings/preferences/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSettingsPositionsIndexRoute =
+  AppSettingsPositionsIndexRouteImport.update({
+    id: '/settings/positions/',
+    path: '/settings/positions/',
     getParentRoute: () => AppRoute,
   } as any)
 const AppSettingsPenaltiesIndexRoute =
@@ -111,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/settings/leaves/': typeof AppSettingsLeavesIndexRoute
   '/settings/legal/': typeof AppSettingsLegalIndexRoute
   '/settings/penalties/': typeof AppSettingsPenaltiesIndexRoute
+  '/settings/positions/': typeof AppSettingsPositionsIndexRoute
   '/settings/preferences/': typeof AppSettingsPreferencesIndexRoute
   '/settings/salary/': typeof AppSettingsSalaryIndexRoute
 }
@@ -126,6 +134,7 @@ export interface FileRoutesByTo {
   '/settings/leaves': typeof AppSettingsLeavesIndexRoute
   '/settings/legal': typeof AppSettingsLegalIndexRoute
   '/settings/penalties': typeof AppSettingsPenaltiesIndexRoute
+  '/settings/positions': typeof AppSettingsPositionsIndexRoute
   '/settings/preferences': typeof AppSettingsPreferencesIndexRoute
   '/settings/salary': typeof AppSettingsSalaryIndexRoute
 }
@@ -143,6 +152,7 @@ export interface FileRoutesById {
   '/_app/settings/leaves/': typeof AppSettingsLeavesIndexRoute
   '/_app/settings/legal/': typeof AppSettingsLegalIndexRoute
   '/_app/settings/penalties/': typeof AppSettingsPenaltiesIndexRoute
+  '/_app/settings/positions/': typeof AppSettingsPositionsIndexRoute
   '/_app/settings/preferences/': typeof AppSettingsPreferencesIndexRoute
   '/_app/settings/salary/': typeof AppSettingsSalaryIndexRoute
 }
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/settings/leaves/'
     | '/settings/legal/'
     | '/settings/penalties/'
+    | '/settings/positions/'
     | '/settings/preferences/'
     | '/settings/salary/'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/settings/leaves'
     | '/settings/legal'
     | '/settings/penalties'
+    | '/settings/positions'
     | '/settings/preferences'
     | '/settings/salary'
   id:
@@ -191,6 +203,7 @@ export interface FileRouteTypes {
     | '/_app/settings/leaves/'
     | '/_app/settings/legal/'
     | '/_app/settings/penalties/'
+    | '/_app/settings/positions/'
     | '/_app/settings/preferences/'
     | '/_app/settings/salary/'
   fileRoutesById: FileRoutesById
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsPreferencesIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings/positions/': {
+      id: '/_app/settings/positions/'
+      path: '/settings/positions'
+      fullPath: '/settings/positions/'
+      preLoaderRoute: typeof AppSettingsPositionsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings/penalties/': {
       id: '/_app/settings/penalties/'
       path: '/settings/penalties'
@@ -314,6 +334,7 @@ interface AppRouteChildren {
   AppSettingsLeavesIndexRoute: typeof AppSettingsLeavesIndexRoute
   AppSettingsLegalIndexRoute: typeof AppSettingsLegalIndexRoute
   AppSettingsPenaltiesIndexRoute: typeof AppSettingsPenaltiesIndexRoute
+  AppSettingsPositionsIndexRoute: typeof AppSettingsPositionsIndexRoute
   AppSettingsPreferencesIndexRoute: typeof AppSettingsPreferencesIndexRoute
   AppSettingsSalaryIndexRoute: typeof AppSettingsSalaryIndexRoute
 }
@@ -330,6 +351,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsLeavesIndexRoute: AppSettingsLeavesIndexRoute,
   AppSettingsLegalIndexRoute: AppSettingsLegalIndexRoute,
   AppSettingsPenaltiesIndexRoute: AppSettingsPenaltiesIndexRoute,
+  AppSettingsPositionsIndexRoute: AppSettingsPositionsIndexRoute,
   AppSettingsPreferencesIndexRoute: AppSettingsPreferencesIndexRoute,
   AppSettingsSalaryIndexRoute: AppSettingsSalaryIndexRoute,
 }

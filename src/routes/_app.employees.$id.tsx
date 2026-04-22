@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2 } from "lucide-react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, monthsToRetirement, ageInYears, formatYM, formatDateAR, baseSalary, formatIQD } from "@/lib/calc";
@@ -87,6 +87,11 @@ function EmployeeDetail() {
           <div className="flex-1">
             <h1 className="text-2xl md:text-3xl font-extrabold">{e.fullName}</h1>
             <div className="text-primary-foreground/80 mt-1">{e.jobTitle} · {dept?.name}</div>
+            {e.position && (
+              <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full bg-amber/90 text-amber-foreground text-xs font-bold shadow-sm">
+                <Crown className="size-3.5" /> {e.position}
+              </div>
+            )}
             <div className="flex flex-wrap gap-3 mt-4 text-sm">
               <Chip icon={IdCard}>{e.empNo}</Chip>
               <Chip icon={Phone}>{e.phone}</Chip>
