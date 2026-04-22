@@ -13,7 +13,7 @@ import type {
 
 export const useEmployees = () => useStore<Employee[]>("employees", SEED_EMPLOYEES);
 export const useDepartments = () => useStore<Department[]>("departments", SEED_DEPARTMENTS);
-export const useJobTitles = () => useStore<JobTitle[]>("jobTitles", SEED_JOB_TITLES);
+export const useJobTitles = () => useStore<JobTitle[]>("jobTitles_v2", SEED_JOB_TITLES);
 export const useLeaveTypes = () => useStore<LeaveType[]>("leaveTypes", SEED_LEAVE_TYPES);
 export const useLeaveRecords = () => useStore<LeaveRecord[]>("leaveRecords", []);
 export const usePenaltyTypes = () => useStore<PenaltyType[]>("penaltyTypes", SEED_PENALTY_TYPES);

@@ -19,15 +19,169 @@ export const SEED_DEPARTMENTS: Department[] = [
   { id: "d6", name: "قسم تكنولوجيا المعلومات", code: "IT" },
 ];
 
+// قانون الخدمة المدنية رقم 24/1960 + قانون الملاك رقم 25/1960 - السلم الوظيفي العراقي الكامل
 export const SEED_JOB_TITLES: JobTitle[] = [
-  { id: "j1", name: "مدير عام", code: "DG" },
-  { id: "j2", name: "مدير قسم", code: "DM" },
-  { id: "j3", name: "رئيس شعبة", code: "DH" },
-  { id: "j4", name: "موظف", code: "EMP" },
-  { id: "j5", name: "مدرس مساعد", code: "AT" },
-  { id: "j6", name: "أستاذ", code: "PR" },
-  { id: "j7", name: "مهندس", code: "ENG" },
-  { id: "j8", name: "محاسب", code: "ACC" },
+  // الإدارة العليا
+  { id: "j_dg",  name: "مدير عام", code: "DG", defaultGrade: 1, category: "الإدارة العليا" },
+
+  // 1- الوظائف الهندسية
+  { id: "j_eng_1", name: "خبير (هندسي)", code: "ENG-EXP", defaultGrade: 1, category: "الوظائف الهندسية" },
+  { id: "j_eng_2", name: "رئيس مهندسين أقدم", code: "ENG-CSR", defaultGrade: 2, category: "الوظائف الهندسية" },
+  { id: "j_eng_3", name: "رئيس مهندسين", code: "ENG-CH", defaultGrade: 3, category: "الوظائف الهندسية" },
+  { id: "j_eng_4", name: "معاون رئيس مهندسين", code: "ENG-DCH", defaultGrade: 4, category: "الوظائف الهندسية" },
+  { id: "j_eng_5", name: "مهندس أقدم", code: "ENG-SR", defaultGrade: 5, category: "الوظائف الهندسية" },
+  { id: "j_eng_6", name: "مهندس", code: "ENG", defaultGrade: 6, category: "الوظائف الهندسية" },
+  { id: "j_eng_7", name: "معاون مهندس", code: "ENG-AST", defaultGrade: 7, category: "الوظائف الهندسية" },
+
+  // 2- الوظائف القانونية
+  { id: "j_law_1", name: "مستشار قانوني في الوزارة", code: "LAW-MIN", defaultGrade: 1, category: "الوظائف القانونية" },
+  { id: "j_law_2", name: "مستشار قانوني مساعد", code: "LAW-AC", defaultGrade: 2, category: "الوظائف القانونية" },
+  { id: "j_law_3", name: "مشاور قانوني أقدم", code: "LAW-SC", defaultGrade: 3, category: "الوظائف القانونية" },
+  { id: "j_law_4", name: "مشاور قانوني", code: "LAW-C", defaultGrade: 4, category: "الوظائف القانونية" },
+  { id: "j_law_5", name: "مشاور قانوني مساعد", code: "LAW-AS", defaultGrade: 5, category: "الوظائف القانونية" },
+  { id: "j_law_6", name: "قانوني", code: "LAW", defaultGrade: 6, category: "الوظائف القانونية" },
+  { id: "j_law_7", name: "معاون قانوني", code: "LAW-AST", defaultGrade: 7, category: "الوظائف القانونية" },
+
+  // 3- المبرمجون
+  { id: "j_pg_1", name: "مدير تنفيذي (مبرمجون)", code: "PG-EXEC", defaultGrade: 1, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_2", name: "رئيس مبرمجين أقدم", code: "PG-CSR", defaultGrade: 2, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_3", name: "رئيس مبرمجين", code: "PG-CH", defaultGrade: 3, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_4", name: "معاون رئيس مبرمجين", code: "PG-DCH", defaultGrade: 4, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_5", name: "مبرمج أقدم", code: "PG-SR", defaultGrade: 5, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_6", name: "مبرمج", code: "PG", defaultGrade: 6, category: "الحاسبات - مبرمجون" },
+  { id: "j_pg_7", name: "معاون مبرمج", code: "PG-AST", defaultGrade: 7, category: "الحاسبات - مبرمجون" },
+
+  // 4- اختصاصي نظم ومعلومات
+  { id: "j_is_2", name: "رئيس اختصاصيي نظم ومعلومات أقدم", code: "IS-CSR", defaultGrade: 2, category: "الحاسبات - نظم ومعلومات" },
+  { id: "j_is_3", name: "رئيس اختصاصيي نظم ومعلومات", code: "IS-CH", defaultGrade: 3, category: "الحاسبات - نظم ومعلومات" },
+  { id: "j_is_4", name: "معاون رئيس اختصاصيي نظم ومعلومات", code: "IS-DCH", defaultGrade: 4, category: "الحاسبات - نظم ومعلومات" },
+  { id: "j_is_5", name: "اختصاصي نظم ومعلومات أقدم", code: "IS-SR", defaultGrade: 5, category: "الحاسبات - نظم ومعلومات" },
+  { id: "j_is_6", name: "اختصاصي نظم ومعلومات", code: "IS", defaultGrade: 6, category: "الحاسبات - نظم ومعلومات" },
+  { id: "j_is_7", name: "معاون اختصاصي نظم ومعلومات", code: "IS-AST", defaultGrade: 7, category: "الحاسبات - نظم ومعلومات" },
+
+  // 5- مشغلو الحاسبة
+  { id: "j_op_5", name: "رئيس مشغلي حاسبة", code: "OP-CH", defaultGrade: 5, category: "الحاسبات - مشغلون" },
+  { id: "j_op_6", name: "مشغل حاسبة أقدم", code: "OP-SR", defaultGrade: 6, category: "الحاسبات - مشغلون" },
+  { id: "j_op_7", name: "مشغل حاسبة", code: "OP", defaultGrade: 7, category: "الحاسبات - مشغلون" },
+
+  // 6- الإحصائيون
+  { id: "j_st_2", name: "رئيس إحصائيين أقدم", code: "ST-CSR", defaultGrade: 2, category: "الوظائف الإحصائية" },
+  { id: "j_st_3", name: "رئيس إحصائيين", code: "ST-CH", defaultGrade: 3, category: "الوظائف الإحصائية" },
+  { id: "j_st_4", name: "معاون رئيس إحصائيين", code: "ST-DCH", defaultGrade: 4, category: "الوظائف الإحصائية" },
+  { id: "j_st_5", name: "إحصائي أقدم", code: "ST-SR", defaultGrade: 5, category: "الوظائف الإحصائية" },
+  { id: "j_st_6", name: "إحصائي", code: "ST", defaultGrade: 6, category: "الوظائف الإحصائية" },
+  { id: "j_st_7", name: "معاون إحصائي", code: "ST-AST", defaultGrade: 7, category: "الوظائف الإحصائية" },
+
+  // 7- الكيميائيون
+  { id: "j_ch_2", name: "رئيس كيمياويين أقدم", code: "CH-CSR", defaultGrade: 2, category: "الكيميائيون" },
+  { id: "j_ch_3", name: "رئيس كيمياويين", code: "CH-CH", defaultGrade: 3, category: "الكيميائيون" },
+  { id: "j_ch_4", name: "معاون رئيس كيمياويين", code: "CH-DCH", defaultGrade: 4, category: "الكيميائيون" },
+  { id: "j_ch_5", name: "كيمياوي أقدم", code: "CH-SR", defaultGrade: 5, category: "الكيميائيون" },
+  { id: "j_ch_6", name: "كيمياوي", code: "CH", defaultGrade: 6, category: "الكيميائيون" },
+  { id: "j_ch_7", name: "معاون كيمياوي", code: "CH-AST", defaultGrade: 7, category: "الكيميائيون" },
+
+  // 8- الفيزيائيون
+  { id: "j_ph_2", name: "رئيس فيزياويين أقدم", code: "PH-CSR", defaultGrade: 2, category: "الفيزيائيون" },
+  { id: "j_ph_3", name: "رئيس فيزياويين", code: "PH-CH", defaultGrade: 3, category: "الفيزيائيون" },
+  { id: "j_ph_4", name: "معاون رئيس فيزياويين", code: "PH-DCH", defaultGrade: 4, category: "الفيزيائيون" },
+  { id: "j_ph_5", name: "فيزياوي أقدم", code: "PH-SR", defaultGrade: 5, category: "الفيزيائيون" },
+  { id: "j_ph_6", name: "فيزياوي", code: "PH", defaultGrade: 6, category: "الفيزيائيون" },
+  { id: "j_ph_7", name: "معاون فيزياوي", code: "PH-AST", defaultGrade: 7, category: "الفيزيائيون" },
+
+  // 9- المترجمون
+  { id: "j_tr_2", name: "رئيس مترجمين أقدم", code: "TR-CSR", defaultGrade: 2, category: "المترجمون" },
+  { id: "j_tr_3", name: "رئيس مترجمين", code: "TR-CH", defaultGrade: 3, category: "المترجمون" },
+  { id: "j_tr_4", name: "معاون رئيس مترجمين", code: "TR-DCH", defaultGrade: 4, category: "المترجمون" },
+  { id: "j_tr_5", name: "مترجم أقدم", code: "TR-SR", defaultGrade: 5, category: "المترجمون" },
+  { id: "j_tr_6", name: "مترجم", code: "TR", defaultGrade: 6, category: "المترجمون" },
+  { id: "j_tr_7", name: "معاون مترجم", code: "TR-AST", defaultGrade: 7, category: "المترجمون" },
+
+  // 10- الوظائف الإدارية
+  { id: "j_ad_1", name: "خبير / معاون مدير عام", code: "AD-EXP", defaultGrade: 1, category: "الوظائف الإدارية" },
+  { id: "j_ad_2", name: "مدير أقدم", code: "AD-SDR", defaultGrade: 2, category: "الوظائف الإدارية" },
+  { id: "j_ad_3", name: "مدير", code: "AD-DR", defaultGrade: 3, category: "الوظائف الإدارية" },
+  { id: "j_ad_4", name: "معاون مدير", code: "AD-DDR", defaultGrade: 4, category: "الوظائف الإدارية" },
+  { id: "j_ad_5", name: "رئيس ملاحظين", code: "AD-CO", defaultGrade: 5, category: "الوظائف الإدارية" },
+  { id: "j_ad_6", name: "ملاحظ", code: "AD-OB", defaultGrade: 6, category: "الوظائف الإدارية" },
+  { id: "j_ad_7", name: "معاون ملاحظ", code: "AD-AOB", defaultGrade: 7, category: "الوظائف الإدارية" },
+  { id: "j_ad_8", name: "كاتب", code: "AD-CL", defaultGrade: 8, category: "الوظائف الإدارية" },
+
+  // 11- الوظائف الفنية
+  { id: "j_tc_2", name: "مدير فني أقدم", code: "TC-SDR", defaultGrade: 2, category: "الوظائف الفنية" },
+  { id: "j_tc_3", name: "مدير فني", code: "TC-DR", defaultGrade: 3, category: "الوظائف الفنية" },
+  { id: "j_tc_4", name: "معاون مدير فني", code: "TC-DDR", defaultGrade: 4, category: "الوظائف الفنية" },
+  { id: "j_tc_5", name: "رئيس ملاحظين فنيين", code: "TC-CO", defaultGrade: 5, category: "الوظائف الفنية" },
+  { id: "j_tc_6", name: "ملاحظ فني", code: "TC-OB", defaultGrade: 6, category: "الوظائف الفنية" },
+  { id: "j_tc_7", name: "معاون ملاحظ فني", code: "TC-AOB", defaultGrade: 7, category: "الوظائف الفنية" },
+  { id: "j_tc_8", name: "فني", code: "TC", defaultGrade: 8, category: "الوظائف الفنية" },
+
+  // 12- الوظائف الحسابية
+  { id: "j_ac_1", name: "خبير (حسابات)", code: "AC-EXP", defaultGrade: 1, category: "الوظائف الحسابية" },
+  { id: "j_ac_2", name: "مدير حسابات أقدم", code: "AC-SDR", defaultGrade: 2, category: "الوظائف الحسابية" },
+  { id: "j_ac_3", name: "مدير حسابات", code: "AC-DR", defaultGrade: 3, category: "الوظائف الحسابية" },
+  { id: "j_ac_4", name: "معاون مدير حسابات", code: "AC-DDR", defaultGrade: 4, category: "الوظائف الحسابية" },
+  { id: "j_ac_5", name: "محاسب أقدم", code: "AC-SR", defaultGrade: 5, category: "الوظائف الحسابية" },
+  { id: "j_ac_6", name: "محاسب", code: "AC", defaultGrade: 6, category: "الوظائف الحسابية" },
+  { id: "j_ac_7", name: "معاون محاسب", code: "AC-AST", defaultGrade: 7, category: "الوظائف الحسابية" },
+  { id: "j_ac_8", name: "كاتب حسابات", code: "AC-CL", defaultGrade: 8, category: "الوظائف الحسابية" },
+
+  // 13- الوظائف التدقيقية
+  { id: "j_au_1", name: "خبير (تدقيق)", code: "AU-EXP", defaultGrade: 1, category: "الوظائف التدقيقية" },
+  { id: "j_au_2", name: "مدير تدقيق أقدم", code: "AU-SDR", defaultGrade: 2, category: "الوظائف التدقيقية" },
+  { id: "j_au_3", name: "مدير تدقيق", code: "AU-DR", defaultGrade: 3, category: "الوظائف التدقيقية" },
+  { id: "j_au_4", name: "معاون مدير تدقيق", code: "AU-DDR", defaultGrade: 4, category: "الوظائف التدقيقية" },
+  { id: "j_au_5", name: "مدقق أقدم", code: "AU-SR", defaultGrade: 5, category: "الوظائف التدقيقية" },
+  { id: "j_au_6", name: "مدقق", code: "AU", defaultGrade: 6, category: "الوظائف التدقيقية" },
+  { id: "j_au_7", name: "معاون مدقق", code: "AU-AST", defaultGrade: 7, category: "الوظائف التدقيقية" },
+  { id: "j_au_8", name: "كاتب تدقيق", code: "AU-CL", defaultGrade: 8, category: "الوظائف التدقيقية" },
+
+  // 14- وظائف المخازن
+  { id: "j_st2_1", name: "خبير (مخازن)", code: "WH-EXP", defaultGrade: 1, category: "وظائف المخازن" },
+  { id: "j_st2_2", name: "مدير مخازن أقدم", code: "WH-SDR", defaultGrade: 2, category: "وظائف المخازن" },
+  { id: "j_st2_3", name: "مدير مخازن", code: "WH-DR", defaultGrade: 3, category: "وظائف المخازن" },
+  { id: "j_st2_4", name: "معاون مدير مخازن", code: "WH-DDR", defaultGrade: 4, category: "وظائف المخازن" },
+  { id: "j_st2_5", name: "أمين مخزن أقدم", code: "WH-SR", defaultGrade: 5, category: "وظائف المخازن" },
+  { id: "j_st2_6", name: "أمين مخزن", code: "WH", defaultGrade: 6, category: "وظائف المخازن" },
+  { id: "j_st2_7", name: "معاون أمين مخزن", code: "WH-AST", defaultGrade: 7, category: "وظائف المخازن" },
+  { id: "j_st2_8", name: "كاتب مخزن", code: "WH-CL", defaultGrade: 8, category: "وظائف المخازن" },
+
+  // 15- أمناء الصندوق
+  { id: "j_cs_5", name: "أمين صندوق أقدم", code: "CS-SR", defaultGrade: 5, category: "أمناء الصندوق" },
+  { id: "j_cs_6", name: "أمين صندوق", code: "CS", defaultGrade: 6, category: "أمناء الصندوق" },
+  { id: "j_cs_7", name: "معاون أمين صندوق", code: "CS-AST", defaultGrade: 7, category: "أمناء الصندوق" },
+
+  // 16- الرسامون الهندسيون
+  { id: "j_dr_3", name: "رئيس رسامين هندسيين أقدم", code: "DR-CSR", defaultGrade: 3, category: "الرسامون الهندسيون" },
+  { id: "j_dr_4", name: "رئيس رسامين هندسيين", code: "DR-CH", defaultGrade: 4, category: "الرسامون الهندسيون" },
+  { id: "j_dr_5", name: "معاون رئيس رسامين هندسيين", code: "DR-DCH", defaultGrade: 5, category: "الرسامون الهندسيون" },
+  { id: "j_dr_6", name: "رسام هندسي أقدم", code: "DR-SR", defaultGrade: 6, category: "الرسامون الهندسيون" },
+  { id: "j_dr_7", name: "رسام هندسي", code: "DR", defaultGrade: 7, category: "الرسامون الهندسيون" },
+  { id: "j_dr_8", name: "معاون رسام هندسي", code: "DR-AST", defaultGrade: 8, category: "الرسامون الهندسيون" },
+
+  // 17- المساحون
+  { id: "j_sv_3", name: "رئيس مساحين أقدم", code: "SV-CSR", defaultGrade: 3, category: "المساحون" },
+  { id: "j_sv_4", name: "رئيس مساحين", code: "SV-CH", defaultGrade: 4, category: "المساحون" },
+  { id: "j_sv_5", name: "معاون رئيس مساحين", code: "SV-DCH", defaultGrade: 5, category: "المساحون" },
+  { id: "j_sv_6", name: "مساح أقدم", code: "SV-SR", defaultGrade: 6, category: "المساحون" },
+  { id: "j_sv_7", name: "مساح", code: "SV", defaultGrade: 7, category: "المساحون" },
+  { id: "j_sv_8", name: "معاون مساح", code: "SV-AST", defaultGrade: 8, category: "المساحون" },
+
+  // 18- كتاب الطابعة
+  { id: "j_ty_5",  name: "رئيس كتاب طابعة", code: "TY-CH", defaultGrade: 5, category: "كتاب الطابعة" },
+  { id: "j_ty_6",  name: "معاون رئيس كتاب طابعة", code: "TY-DCH", defaultGrade: 6, category: "كتاب الطابعة" },
+  { id: "j_ty_7",  name: "كاتب طابعة أقدم", code: "TY-SR", defaultGrade: 7, category: "كتاب الطابعة" },
+  { id: "j_ty_8",  name: "كاتب طابعة أول", code: "TY-1", defaultGrade: 8, category: "كتاب الطابعة" },
+  { id: "j_ty_9",  name: "كاتب طابعة ثاني", code: "TY-2", defaultGrade: 9, category: "كتاب الطابعة" },
+  { id: "j_ty_10", name: "كاتب طابعة ثالث", code: "TY-3", defaultGrade: 10, category: "كتاب الطابعة" },
+
+  // 19- الحرفيون
+  { id: "j_cr_5",  name: "رئيس حرفيين أقدم", code: "CR-CSR", defaultGrade: 5, category: "الحرفيون والخدميون" },
+  { id: "j_cr_6",  name: "رئيس حرفيين", code: "CR-CH", defaultGrade: 6, category: "الحرفيون والخدميون" },
+  { id: "j_cr_7",  name: "معاون رئيس حرفيين", code: "CR-DCH", defaultGrade: 7, category: "الحرفيون والخدميون" },
+  { id: "j_cr_8",  name: "حرفي أقدم", code: "CR-SR", defaultGrade: 8, category: "الحرفيون والخدميون" },
+  { id: "j_cr_9",  name: "حرفي أول", code: "CR-1", defaultGrade: 9, category: "الحرفيون والخدميون" },
+  { id: "j_cr_10", name: "حرفي", code: "CR", defaultGrade: 10, category: "الحرفيون والخدميون" },
+  { id: "j_cr_11", name: "معاون حرفي", code: "CR-AST", defaultGrade: 11, category: "الحرفيون والخدميون" },
 ];
 
 // قانون الخدمة المدنية رقم 24 لسنة 1960 + قانون العمل رقم 37 لسنة 2015

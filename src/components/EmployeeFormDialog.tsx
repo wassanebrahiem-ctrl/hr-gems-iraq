@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 import type { Employee } from "@/lib/types";
 import { useDepartments, useJobTitles } from "@/lib/data-init";
 import { uid } from "@/lib/storage";
@@ -86,15 +90,19 @@ export function EmployeeFormDialog({ open, onOpenChange, employee, onSave }: Pro
             </Select>
           </Field>
           <Field label="العنوان الوظيفي">
-            <Select value={form.jobTitle} onValueChange={(v) => setForm({ ...form, jobTitle: v })}>
-              <SelectTrigger><SelectValue placeholder="اختر عنواناً" /></SelectTrigger>
-              <SelectContent>
-                {jobTitles.map((j) => <SelectItem key={j.id} value={j.name}>{j.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <JobTitleCombobox
+              value={form.jobTitle}
+              onChange={(name, defaultGrade) =>
+                setForm((f) => ({
+                  ...f,
+                  jobTitle: name,
+                  grade: defaultGrade ?? f.grade,
+                }))
+              }
+            />
           </Field>
-          <Field label="الدرجة (1-10)">
-            <Input type="number" min={1} max={10} value={form.grade} onChange={(e) => setForm({ ...form, grade: Number(e.target.value) })} />
+          <Field label="الدرجة (1-11)">
+            <Input type="number" min={1} max={11} value={form.grade} onChange={(e) => setForm({ ...form, grade: Number(e.target.value) })} />
           </Field>
           <Field label="المرحلة (1-10)">
             <Input type="number" min={1} max={10} value={form.stage} onChange={(e) => setForm({ ...form, stage: Number(e.target.value) })} />
@@ -138,5 +146,73 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <Label className="text-xs font-semibold text-foreground">{label}</Label>
       {children}
     </div>
+  );
+}
+
+function JobTitleCombobox({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (name: string, defaultGrade?: number) => void;
+}) {
+  const [jobTitles] = useJobTitles();
+  const [open, setOpen] = useState(false);
+
+  const groups = jobTitles.reduce<Record<string, typeof jobTitles>>((acc, j) => {
+    const k = j.category || "أخرى";
+    (acc[k] ||= []).push(j);
+    return acc;
+  }, {});
+
+  const selected = jobTitles.find((j) => j.name === value);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between font-normal"
+        >
+          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+            {selected ? `${selected.name} (د.${selected.defaultGrade})` : "اختر عنواناً وظيفياً..."}
+          </span>
+          <ChevronsUpDown className="size-4 opacity-50 shrink-0" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start" dir="rtl">
+        <Command
+          filter={(itemValue, search) =>
+            itemValue.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
+          }
+        >
+          <CommandInput placeholder="ابحث بالاسم أو التصنيف..." />
+          <CommandList className="max-h-72">
+            <CommandEmpty>لا توجد نتائج.</CommandEmpty>
+            {Object.entries(groups).map(([cat, items]) => (
+              <CommandGroup key={cat} heading={cat}>
+                {items.map((j) => (
+                  <CommandItem
+                    key={j.id}
+                    value={`${j.name} ${j.category ?? ""} ${j.code}`}
+                    onSelect={() => {
+                      onChange(j.name, j.defaultGrade);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check className={cn("ml-2 size-4", value === j.name ? "opacity-100" : "opacity-0")} />
+                    <span className="flex-1">{j.name}</span>
+                    <span className="text-xs text-muted-foreground arabic-num">د.{j.defaultGrade}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ))}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
