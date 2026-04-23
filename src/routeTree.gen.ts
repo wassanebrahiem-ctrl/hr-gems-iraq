@@ -24,6 +24,7 @@ import { Route as AppSettingsLeavesIndexRouteImport } from './routes/_app.settin
 import { Route as AppSettingsJobTitlesIndexRouteImport } from './routes/_app.settings.job-titles.index'
 import { Route as AppSettingsDepartmentsIndexRouteImport } from './routes/_app.settings.departments.index'
 import { Route as AppSettingsCommendationsIndexRouteImport } from './routes/_app.settings.commendations.index'
+import { Route as AppReportsCadreIndexRouteImport } from './routes/_app.reports.cadre.index'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -105,6 +106,11 @@ const AppSettingsCommendationsIndexRoute =
     path: '/settings/commendations/',
     getParentRoute: () => AppRoute,
   } as any)
+const AppReportsCadreIndexRoute = AppReportsCadreIndexRouteImport.update({
+  id: '/reports/cadre/',
+  path: '/reports/cadre/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/analytics/': typeof AppAnalyticsIndexRoute
   '/employees/': typeof AppEmployeesIndexRoute
   '/reports/': typeof AppReportsIndexRoute
+  '/reports/cadre/': typeof AppReportsCadreIndexRoute
   '/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
   '/settings/departments/': typeof AppSettingsDepartmentsIndexRoute
   '/settings/job-titles/': typeof AppSettingsJobTitlesIndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AppAnalyticsIndexRoute
   '/employees': typeof AppEmployeesIndexRoute
   '/reports': typeof AppReportsIndexRoute
+  '/reports/cadre': typeof AppReportsCadreIndexRoute
   '/settings/commendations': typeof AppSettingsCommendationsIndexRoute
   '/settings/departments': typeof AppSettingsDepartmentsIndexRoute
   '/settings/job-titles': typeof AppSettingsJobTitlesIndexRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/_app/analytics/': typeof AppAnalyticsIndexRoute
   '/_app/employees/': typeof AppEmployeesIndexRoute
   '/_app/reports/': typeof AppReportsIndexRoute
+  '/_app/reports/cadre/': typeof AppReportsCadreIndexRoute
   '/_app/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
   '/_app/settings/departments/': typeof AppSettingsDepartmentsIndexRoute
   '/_app/settings/job-titles/': typeof AppSettingsJobTitlesIndexRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/analytics/'
     | '/employees/'
     | '/reports/'
+    | '/reports/cadre/'
     | '/settings/commendations/'
     | '/settings/departments/'
     | '/settings/job-titles/'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/employees'
     | '/reports'
+    | '/reports/cadre'
     | '/settings/commendations'
     | '/settings/departments'
     | '/settings/job-titles'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/_app/analytics/'
     | '/_app/employees/'
     | '/_app/reports/'
+    | '/_app/reports/cadre/'
     | '/_app/settings/commendations/'
     | '/_app/settings/departments/'
     | '/_app/settings/job-titles/'
@@ -319,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsCommendationsIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/reports/cadre/': {
+      id: '/_app/reports/cadre/'
+      path: '/reports/cadre'
+      fullPath: '/reports/cadre/'
+      preLoaderRoute: typeof AppReportsCadreIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -328,6 +347,7 @@ interface AppRouteChildren {
   AppAnalyticsIndexRoute: typeof AppAnalyticsIndexRoute
   AppEmployeesIndexRoute: typeof AppEmployeesIndexRoute
   AppReportsIndexRoute: typeof AppReportsIndexRoute
+  AppReportsCadreIndexRoute: typeof AppReportsCadreIndexRoute
   AppSettingsCommendationsIndexRoute: typeof AppSettingsCommendationsIndexRoute
   AppSettingsDepartmentsIndexRoute: typeof AppSettingsDepartmentsIndexRoute
   AppSettingsJobTitlesIndexRoute: typeof AppSettingsJobTitlesIndexRoute
@@ -345,6 +365,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsIndexRoute: AppAnalyticsIndexRoute,
   AppEmployeesIndexRoute: AppEmployeesIndexRoute,
   AppReportsIndexRoute: AppReportsIndexRoute,
+  AppReportsCadreIndexRoute: AppReportsCadreIndexRoute,
   AppSettingsCommendationsIndexRoute: AppSettingsCommendationsIndexRoute,
   AppSettingsDepartmentsIndexRoute: AppSettingsDepartmentsIndexRoute,
   AppSettingsJobTitlesIndexRoute: AppSettingsJobTitlesIndexRoute,
