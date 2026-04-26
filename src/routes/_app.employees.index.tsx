@@ -8,7 +8,7 @@ import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCo
 import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
-import { EmployeeFormDialog } from "@/components/EmployeeFormDialog";
+import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/employees/")({
