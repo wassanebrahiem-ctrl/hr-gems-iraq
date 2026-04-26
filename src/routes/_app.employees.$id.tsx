@@ -271,6 +271,8 @@ function EmployeeDetail() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <EmployeeUnifiedEditDialog open={openEditEmployee} onOpenChange={setOpenEditEmployee} employee={e} />
     </div>
   );
 }
