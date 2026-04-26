@@ -8,7 +8,7 @@ import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCo
 import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
-import { EmployeeFormDialog } from "@/components/EmployeeFormDialog";
+import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/employees/")({
@@ -66,16 +66,6 @@ function EmployeesPage() {
     }
     return list;
   }, [enriched, filter, q]);
-
-  function onSave(emp: Employee) {
-    setEmployees((prev) => {
-      const exists = prev.find((p) => p.id === emp.id);
-      if (exists) return prev.map((p) => (p.id === emp.id ? emp : p));
-      return [...prev, emp];
-    });
-    setOpen(false);
-    setEditEmp(null);
-  }
 
   function onDelete(id: string) {
     if (!confirm("حذف هذا الموظف؟")) return;
@@ -217,11 +207,10 @@ function EmployeesPage() {
         </div>
       </div>
 
-      <EmployeeFormDialog
+      <EmployeeUnifiedEditDialog
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(v) => { setOpen(v); if (!v) setEditEmp(null); }}
         employee={editEmp}
-        onSave={onSave}
       />
     </div>
   );

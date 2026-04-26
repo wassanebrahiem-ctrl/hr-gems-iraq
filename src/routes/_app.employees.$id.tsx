@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2, Crown } from "lucide-react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2, Crown, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
+import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
 import { incrementStatus, promotionStatus, monthsToRetirement, ageInYears, formatYM, formatDateAR, baseSalary, formatIQD } from "@/lib/calc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { uid } from "@/lib/storage";
@@ -42,6 +43,7 @@ function EmployeeDetail() {
   const [openCom, setOpenCom] = useState(false);
   const [editCom, setEditCom] = useState<CommendationRecord | null>(null);
   const [confirmDel, setConfirmDel] = useState<{ kind: "leave" | "pen" | "com"; id: string } | null>(null);
+  const [openEditEmployee, setOpenEditEmployee] = useState(false);
 
   const e = employees.find((x) => x.id === id);
   const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
@@ -72,9 +74,14 @@ function EmployeeDetail() {
 
   return (
     <div className="space-y-6">
-      <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-smooth">
-        <ArrowRight className="size-4" /> رجوع للموظفين
-      </Link>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-smooth">
+          <ArrowRight className="size-4" /> رجوع للموظفين
+        </Link>
+        <Button onClick={() => setOpenEditEmployee(true)} className="gradient-primary text-primary-foreground border-0 gap-2 shadow-md">
+          <Settings2 className="size-4" /> تعديل ملف الموظف
+        </Button>
+      </div>
 
       {/* Profile header */}
       <div className="rounded-3xl gradient-hero p-6 md:p-8 text-primary-foreground shadow-elegant">
@@ -264,6 +271,8 @@ function EmployeeDetail() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <EmployeeUnifiedEditDialog open={openEditEmployee} onOpenChange={setOpenEditEmployee} employee={e} />
     </div>
   );
 }
