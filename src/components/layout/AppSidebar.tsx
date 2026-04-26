@@ -63,7 +63,7 @@ export function AppSidebar() {
             <Sparkles className="size-5 text-amber-foreground" />
           </div>
           <div className="flex-1">
-            <div className="font-extrabold text-lg leading-tight">رِفعَت HR</div>
+            <div className="font-extrabold text-lg leading-tight">هيئة استثمار بغداد</div>
             <div className="text-xs text-sidebar-foreground/60">إدارة الموارد البشرية</div>
           </div>
         </Link>
