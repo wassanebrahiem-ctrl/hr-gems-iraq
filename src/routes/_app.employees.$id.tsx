@@ -43,6 +43,7 @@ function EmployeeDetail() {
   const [openCom, setOpenCom] = useState(false);
   const [editCom, setEditCom] = useState<CommendationRecord | null>(null);
   const [confirmDel, setConfirmDel] = useState<{ kind: "leave" | "pen" | "com"; id: string } | null>(null);
+  const [openEditEmployee, setOpenEditEmployee] = useState(false);
 
   const e = employees.find((x) => x.id === id);
   const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
