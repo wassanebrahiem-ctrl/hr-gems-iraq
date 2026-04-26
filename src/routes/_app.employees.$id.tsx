@@ -74,9 +74,14 @@ function EmployeeDetail() {
 
   return (
     <div className="space-y-6">
-      <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-smooth">
-        <ArrowRight className="size-4" /> رجوع للموظفين
-      </Link>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <Link to="/employees" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-smooth">
+          <ArrowRight className="size-4" /> رجوع للموظفين
+        </Link>
+        <Button onClick={() => setOpenEditEmployee(true)} className="gradient-primary text-primary-foreground border-0 gap-2 shadow-md">
+          <Settings2 className="size-4" /> تعديل ملف الموظف
+        </Button>
+      </div>
 
       {/* Profile header */}
       <div className="rounded-3xl gradient-hero p-6 md:p-8 text-primary-foreground shadow-elegant">
