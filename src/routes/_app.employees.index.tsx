@@ -217,11 +217,10 @@ function EmployeesPage() {
         </div>
       </div>
 
-      <EmployeeFormDialog
+      <EmployeeUnifiedEditDialog
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={(v) => { setOpen(v); if (!v) setEditEmp(null); }}
         employee={editEmp}
-        onSave={onSave}
       />
     </div>
   );
