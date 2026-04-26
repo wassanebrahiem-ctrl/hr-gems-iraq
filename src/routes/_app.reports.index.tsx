@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import {
   useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes,
@@ -415,8 +414,8 @@ function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; o
 
   return (
     <Dialog open={!!report} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col p-0 gap-0">
-        <DialogHeader className="p-6 pb-4 border-b border-border">
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-6xl h-[90vh] max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+        <DialogHeader className="shrink-0 p-6 pb-4 border-b border-border">
           <div className="flex items-start gap-4">
             <div className={`size-12 rounded-2xl flex items-center justify-center shadow-md shrink-0 ${toneMap[report.tone]}`}>
               <Icon className="size-6" />
@@ -443,7 +442,7 @@ function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; o
           )}
         </DialogHeader>
 
-        <ScrollArea className="flex-1 max-h-[55vh]">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y">
           <div className="p-6 pt-4">
             {report.rows.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">
@@ -452,7 +451,7 @@ function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; o
                 <p className="text-xs mt-1">سيظهر التقرير هنا فور توفر السجلات</p>
               </div>
             ) : (
-              <div className="rounded-xl border border-border overflow-hidden">
+              <div className="rounded-xl border border-border overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-muted/50 hover:bg-muted/50">
@@ -482,9 +481,9 @@ function ReportPreviewDialog({ report, onClose }: { report: ReportData | null; o
               </div>
             )}
           </div>
-        </ScrollArea>
+        </div>
 
-        <DialogFooter className="p-4 border-t border-border bg-muted/20 flex-row-reverse sm:flex-row-reverse gap-2">
+        <DialogFooter className="shrink-0 p-4 border-t border-border bg-muted/20 flex-row-reverse sm:flex-row-reverse gap-2">
           <Button onClick={handleExport} disabled={report.rows.length === 0} className="gradient-primary text-primary-foreground border-0 gap-2">
             <Download className="size-4" /> تصدير إلى CSV
           </Button>
