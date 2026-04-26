@@ -67,16 +67,6 @@ function EmployeesPage() {
     return list;
   }, [enriched, filter, q]);
 
-  function onSave(emp: Employee) {
-    setEmployees((prev) => {
-      const exists = prev.find((p) => p.id === emp.id);
-      if (exists) return prev.map((p) => (p.id === emp.id ? emp : p));
-      return [...prev, emp];
-    });
-    setOpen(false);
-    setEditEmp(null);
-  }
-
   function onDelete(id: string) {
     if (!confirm("حذف هذا الموظف؟")) return;
     setEmployees((prev) => prev.filter((p) => p.id !== id));
