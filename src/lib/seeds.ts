@@ -26,12 +26,16 @@ export const SEED_POSITIONS: Position[] = [
 
 
 export const SEED_DEPARTMENTS: Department[] = [
-  { id: "d1", name: "القسم المالي", code: "FIN" },
-  { id: "d2", name: "شعبة شؤون الموظفين", code: "HR" },
-  { id: "d3", name: "قسم الرقابة الداخلية", code: "AUD" },
-  { id: "d4", name: "المديرية العامة", code: "GEN" },
-  { id: "d5", name: "القسم القانوني", code: "LEG" },
-  { id: "d6", name: "قسم تكنولوجيا المعلومات", code: "IT" },
+  { id: "d1",  name: "إدارة الجودة والتطوير المؤسسي", code: "QDV" },
+  { id: "d2",  name: "الإداري والمالي",               code: "ADF" },
+  { id: "d3",  name: "الاقتصادي والفني",              code: "ECT" },
+  { id: "d4",  name: "الرقابة والتدقيق",              code: "AUD" },
+  { id: "d5",  name: "العلاقات العامة",               code: "PR"  },
+  { id: "d6",  name: "القانوني",                      code: "LEG" },
+  { id: "d7",  name: "النافذة الواحدة",               code: "OSW" },
+  { id: "d8",  name: "مكتب رئيس الهيئة",              code: "CHR" },
+  { id: "d9",  name: "مكتب نائب رئيس الهيئة",         code: "VCH" },
+  { id: "d10", name: "المستقبلين والنقل",             code: "RCT" },
 ];
 
 // قانون الخدمة المدنية رقم 24/1960 + قانون الملاك رقم 25/1960 - السلم الوظيفي العراقي الكامل
