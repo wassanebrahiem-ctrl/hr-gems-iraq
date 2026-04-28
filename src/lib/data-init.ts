@@ -12,7 +12,7 @@ import type {
 } from "./types";
 
 export const useEmployees = () => useStore<Employee[]>("employees_v2", SEED_EMPLOYEES);
-export const useDepartments = () => useStore<Department[]>("departments", SEED_DEPARTMENTS);
+export const useDepartments = () => useStore<Department[]>("departments_v2", SEED_DEPARTMENTS);
 export const useJobTitles = () => useStore<JobTitle[]>("jobTitles_v2", SEED_JOB_TITLES);
 export const usePositions = () => useStore<Position[]>("positions_v1", SEED_POSITIONS);
 export const useLeaveTypes = () => useStore<LeaveType[]>("leaveTypes", SEED_LEAVE_TYPES);
