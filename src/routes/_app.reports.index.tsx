@@ -206,7 +206,7 @@ function Reports() {
         columns: ["#", "الرقم", "الاسم", "القسم", "الدرجة/المرحلة", "حالة العلاوة", "حالة الترقية", "العقوبات", "كتب الشكر"],
         rows: employees.map((e, i) => {
           const d = departments.find((x) => x.id === e.departmentId);
-          const inc = incrementStatus(e);
+          const inc = incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
           const pr = promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
           return [
             i + 1, e.empNo, e.fullName, d?.name || "—", `${e.grade}/${e.stage}`,
