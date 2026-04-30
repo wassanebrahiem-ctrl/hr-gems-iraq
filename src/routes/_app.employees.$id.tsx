@@ -46,7 +46,7 @@ function EmployeeDetail() {
   const [openEditEmployee, setOpenEditEmployee] = useState(false);
 
   const e = employees.find((x) => x.id === id);
-  const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
+  const inc = useMemo(() => e ? incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes) : null, [e, penalties, penaltyTypes, commendations, commendationTypes]);
   const pr = useMemo(() => e ? promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes) : null, [e, penalties, penaltyTypes, commendations, commendationTypes]);
 
   if (!e || !inc || !pr) return (
