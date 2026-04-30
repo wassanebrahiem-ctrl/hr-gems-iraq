@@ -57,20 +57,55 @@ export interface IncrementStatus {
   monthsSinceLast: number;
   monthsRemaining: number;
   nextDate: string;
+  delayMonths: number;  // تأخير بسبب العقوبات
+  bonusMonths: number;  // تقديم بسبب كتب الشكر
+  requiredMonths: number;
+  effectiveServedMonths: number;
 }
 
-export function incrementStatus(emp: Employee): IncrementStatus {
+export function incrementStatus(
+  emp: Employee,
+  penalties: PenaltyRecord[] = [],
+  penaltyTypes: PenaltyType[] = [],
+  commendations: CommendationRecord[] = [],
+  commendationTypes: CommendationType[] = [],
+): IncrementStatus {
   const last = emp.lastIncrementDate || emp.startDate;
   const lastDate = new Date(last);
-  const next = new Date(lastDate);
-  next.setFullYear(next.getFullYear() + 1);
   const monthsSinceLast = diffMonths(lastDate, new Date());
-  const monthsRemaining = Math.max(0, diffMonths(new Date(), next));
+
+  // تأخير من العقوبات السارية منذ آخر علاوة (قانون الانضباط 14/1991)
+  const delayMonths = penalties
+    .filter((p) => p.employeeId === emp.id && p.active && new Date(p.date) >= lastDate)
+    .reduce((sum, p) => {
+      const t = penaltyTypes.find((x) => x.id === p.penaltyTypeId);
+      return sum + (t?.promotionDelayMonths ?? 0);
+    }, 0);
+
+  // تقديم من كتب الشكر منذ آخر علاوة (المادة 21 - قانون 14/1991)
+  const bonusMonths = commendations
+    .filter((c) => c.employeeId === emp.id && new Date(c.date) >= lastDate)
+    .reduce((sum, c) => {
+      const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
+      return sum + (t?.seniorityBonusMonths ?? 0);
+    }, 0);
+
+  const requiredMonths = 12 + delayMonths - bonusMonths;
+  const effectiveServedMonths = monthsSinceLast;
+  const monthsRemaining = Math.max(0, requiredMonths - effectiveServedMonths);
+
+  const next = new Date(lastDate);
+  next.setMonth(next.getMonth() + requiredMonths);
+
   return {
-    due: monthsSinceLast >= 12,
+    due: effectiveServedMonths >= requiredMonths,
     monthsSinceLast,
     monthsRemaining,
     nextDate: next.toISOString().slice(0, 10),
+    delayMonths,
+    bonusMonths,
+    requiredMonths,
+    effectiveServedMonths,
   };
 }
 
