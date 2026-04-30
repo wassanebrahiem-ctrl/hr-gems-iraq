@@ -58,7 +58,7 @@ function Reports() {
   // ====== Build reports ======
   const reports = useMemo<Record<string, ReportData>>(() => {
     const dueIncrements = employees
-      .map((e) => ({ e, s: incrementStatus(e) }))
+      .map((e) => ({ e, s: incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes) }))
       .filter((x) => x.s.due);
 
     const duePromotions = employees
