@@ -46,7 +46,7 @@ function EmployeeDetail() {
   const [openEditEmployee, setOpenEditEmployee] = useState(false);
 
   const e = employees.find((x) => x.id === id);
-  const inc = useMemo(() => e ? incrementStatus(e) : null, [e]);
+  const inc = useMemo(() => e ? incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes) : null, [e, penalties, penaltyTypes, commendations, commendationTypes]);
   const pr = useMemo(() => e ? promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes) : null, [e, penalties, penaltyTypes, commendations, commendationTypes]);
 
   if (!e || !inc || !pr) return (
@@ -121,7 +121,7 @@ function EmployeeDetail() {
           tone="success"
           title="العلاوة السنوية"
           status={inc.due ? "مستحقة الآن" : `بعد ${inc.monthsRemaining} شهر`}
-          detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"}`}
+          detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"} | تأخير: ${inc.delayMonths} شهر | إضافة: ${inc.bonusMonths} شهر`}
           legal="قانون رواتب الموظفين 22/2008"
           due={inc.due}
         />
