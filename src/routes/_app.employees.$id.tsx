@@ -121,7 +121,7 @@ function EmployeeDetail() {
           tone="success"
           title="العلاوة السنوية"
           status={inc.due ? "مستحقة الآن" : `بعد ${inc.monthsRemaining} شهر`}
-          detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"}`}
+          detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"} | تأخير: ${inc.delayMonths} شهر | إضافة: ${inc.bonusMonths} شهر`}
           legal="قانون رواتب الموظفين 22/2008"
           due={inc.due}
         />
