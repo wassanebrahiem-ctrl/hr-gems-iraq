@@ -24,7 +24,7 @@ function Dashboard() {
 
   const stats = useMemo(() => {
     const active = employees.filter((e) => e.status === "active");
-    const dueIncrement = active.filter((e) => incrementStatus(e).due).length;
+    const dueIncrement = active.filter((e) => incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes).due).length;
     const duePromotion = active.filter((e) => promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes).due).length;
     const activeLeavesToday = leaves.filter((l) => {
       const today = new Date().toISOString().slice(0, 10);
