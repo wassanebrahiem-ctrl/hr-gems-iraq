@@ -35,7 +35,7 @@ function EmployeesPage() {
   const enriched = useMemo(() => {
     const today = new Date().toISOString().slice(0,10);
     return employees.map((e) => {
-      const inc = incrementStatus(e);
+      const inc = incrementStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
       const pr = promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
       const currentLeave = leaves.find((l) => l.employeeId === e.id && l.status === "approved" && l.startDate <= today && l.endDate >= today);
       const onLeave = !!currentLeave;
