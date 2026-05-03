@@ -20,8 +20,8 @@ import type { LeaveRecord, PenaltyRecord, CommendationRecord } from "@/lib/types
 
 export const Route = createFileRoute("/_app/employees/$id")({
   component: EmployeeDetail,
-  validateSearch: (s: Record<string, unknown>) => ({
-    tab: (s.tab as string) || undefined,
+  validateSearch: (s: Record<string, unknown>): { tab?: string } => ({
+    tab: typeof s.tab === "string" ? s.tab : undefined,
   }),
 });
 
