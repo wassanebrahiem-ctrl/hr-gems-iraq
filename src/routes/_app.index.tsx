@@ -100,6 +100,7 @@ function Dashboard() {
                   key={e.id}
                   to="/employees/$id"
                   params={{ id: e.id }}
+                  search={{ tab: undefined }}
                   className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-smooth border-b border-border last:border-0"
                 >
                   <div className="size-10 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center">
