@@ -172,12 +172,54 @@ function Dashboard() {
           <h3 className="font-extrabold text-lg">إجراءات سريعة</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <QuickAction icon={Plus} label="إضافة موظف" to="/employees" tone="primary" />
-          <QuickAction icon={CalendarDays} label="منح إجازة" to="/employees" tone="info" />
-          <QuickAction icon={AlertTriangle} label="تسجيل عقوبة" to="/employees" tone="destructive" />
-          <QuickAction icon={Award} label="كتاب شكر" to="/employees" tone="warning" />
+          <QuickActionLink icon={Plus} label="إضافة موظف" to="/employees" tone="primary" />
+          <QuickActionButton icon={CalendarDays} label="منح إجازة" tone="info" onClick={() => setPickerAction({ tab: "leaves", label: "منح إجازة" })} />
+          <QuickActionButton icon={AlertTriangle} label="تسجيل عقوبة" tone="destructive" onClick={() => setPickerAction({ tab: "penalties", label: "تسجيل عقوبة" })} />
+          <QuickActionButton icon={Award} label="كتاب شكر" tone="warning" onClick={() => setPickerAction({ tab: "commendations", label: "كتاب شكر" })} />
         </div>
       </section>
+
+      {/* Employee picker dialog for quick actions */}
+      <Dialog open={!!pickerAction} onOpenChange={(o) => { if (!o) { setPickerAction(null); setPickQ(""); } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>اختر الموظف لـ: {pickerAction?.label}</DialogTitle>
+            <DialogDescription>ابحث بالاسم، الرقم الوظيفي، رقم الهوية أو الهاتف</DialogDescription>
+          </DialogHeader>
+          <div className="relative">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Input
+              autoFocus
+              value={pickQ}
+              onChange={(e) => setPickQ(e.target.value)}
+              placeholder="اكتب اسم الموظف أو رقمه..."
+              className="h-11 pr-10"
+            />
+          </div>
+          <div className="max-h-80 overflow-y-auto rounded-xl border border-border divide-y divide-border">
+            {pickerResults.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">لا يوجد نتائج</p>
+            ) : pickerResults.map((emp) => {
+              const dept = departments.find((d) => d.id === emp.departmentId);
+              return (
+                <button
+                  key={emp.id}
+                  onClick={() => selectEmployeeForAction(emp.id)}
+                  className="w-full flex items-center gap-3 p-3 text-right hover:bg-muted/50 transition-smooth"
+                >
+                  <div className="size-10 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center">
+                    {emp.fullName.slice(0, 2)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm truncate">{emp.fullName}</div>
+                    <div className="text-xs text-muted-foreground truncate">{emp.empNo} · {dept?.name}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Near retirement preview */}
       <section className="rounded-3xl bg-card border border-border p-6 shadow-md">
