@@ -20,10 +20,14 @@ import type { LeaveRecord, PenaltyRecord, CommendationRecord } from "@/lib/types
 
 export const Route = createFileRoute("/_app/employees/$id")({
   component: EmployeeDetail,
+  validateSearch: (s: Record<string, unknown>): { tab?: string } => ({
+    tab: typeof s.tab === "string" ? s.tab : undefined,
+  }),
 });
 
 function EmployeeDetail() {
   const { id } = useParams({ from: "/_app/employees/$id" });
+  const { tab } = Route.useSearch();
   const [employees] = useEmployees();
   const [departments] = useDepartments();
   const [salary] = useSalary();
@@ -146,7 +150,7 @@ function EmployeeDetail() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="profile" className="w-full">
+      <Tabs defaultValue={tab || "profile"} className="w-full">
         <TabsList className="rounded-xl bg-card border border-border p-1 h-auto flex-wrap gap-1">
           <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg gap-2">
             <UserCircle className="size-4" /> الملف الشخصي

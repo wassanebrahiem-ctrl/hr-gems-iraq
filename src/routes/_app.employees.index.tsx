@@ -186,7 +186,7 @@ function EmployeesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <Link to="/employees/$id" params={{ id: x.e.id }}>
+                        <Link to="/employees/$id" params={{ id: x.e.id }} search={{ tab: undefined }}>
                           <Button size="icon" variant="ghost" className="size-8 text-info hover:bg-info/10"><Eye className="size-4" /></Button>
                         </Link>
                         <Button size="icon" variant="ghost" className="size-8 text-amber hover:bg-amber/10" onClick={() => { setEditEmp(x.e); setOpen(true); }}><Pencil className="size-4" /></Button>
