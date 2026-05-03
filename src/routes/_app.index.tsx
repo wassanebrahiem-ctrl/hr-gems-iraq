@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Users, Award, AlertTriangle, CalendarDays, TrendingUp, ArrowUp, Lightbulb, Zap, ShieldCheck, Plus, FileBarChart } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatCard } from "@/components/StatCard";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useEmployees, usePenaltyRecords, useCommendationRecords, useLeaveRecords, useDepartments } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, isNearRetirement, formatYM } from "@/lib/calc";
 import { usePenaltyTypes, useCommendationTypes } from "@/lib/data-init";
