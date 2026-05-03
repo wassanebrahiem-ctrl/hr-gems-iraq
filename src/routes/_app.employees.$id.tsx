@@ -150,7 +150,7 @@ function EmployeeDetail() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="profile" className="w-full">
+      <Tabs defaultValue={tab || "profile"} className="w-full">
         <TabsList className="rounded-xl bg-card border border-border p-1 h-auto flex-wrap gap-1">
           <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg gap-2">
             <UserCircle className="size-4" /> الملف الشخصي
