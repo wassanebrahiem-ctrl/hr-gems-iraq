@@ -27,6 +27,7 @@ export const Route = createFileRoute("/_app/employees/$id")({
 
 function EmployeeDetail() {
   const { id } = useParams({ from: "/_app/employees/$id" });
+  const { tab } = Route.useSearch();
   const [employees] = useEmployees();
   const [departments] = useDepartments();
   const [salary] = useSalary();
