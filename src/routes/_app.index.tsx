@@ -230,18 +230,29 @@ function Dashboard() {
   );
 }
 
-function QuickAction({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: string; tone: "primary" | "info" | "destructive" | "warning" }) {
-  const toneMap = {
-    primary: "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground",
-    info: "bg-info/10 text-info hover:bg-info hover:text-info-foreground",
-    destructive: "bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground",
-    warning: "bg-warning/15 text-warning hover:bg-warning hover:text-warning-foreground",
-  };
+type Tone = "primary" | "info" | "destructive" | "warning";
+const TONE_MAP: Record<Tone, string> = {
+  primary: "bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground",
+  info: "bg-info/10 text-info hover:bg-info hover:text-info-foreground",
+  destructive: "bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground",
+  warning: "bg-warning/15 text-warning hover:bg-warning hover:text-warning-foreground",
+};
+
+function QuickActionLink({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: "/employees"; tone: Tone }) {
   return (
-    <Link to={to} className={`flex flex-col items-center justify-center gap-2 p-5 rounded-2xl transition-smooth ${toneMap[tone]}`}>
+    <Link to={to} className={`flex flex-col items-center justify-center gap-2 p-5 rounded-2xl transition-smooth ${TONE_MAP[tone]}`}>
       <Icon className="size-6" />
       <span className="font-bold text-sm">{label}</span>
     </Link>
+  );
+}
+
+function QuickActionButton({ icon: Icon, label, tone, onClick }: { icon: React.ComponentType<{ className?: string }>; label: string; tone: Tone; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className={`flex flex-col items-center justify-center gap-2 p-5 rounded-2xl transition-smooth ${TONE_MAP[tone]}`}>
+      <Icon className="size-6" />
+      <span className="font-bold text-sm">{label}</span>
+    </button>
   );
 }
 
