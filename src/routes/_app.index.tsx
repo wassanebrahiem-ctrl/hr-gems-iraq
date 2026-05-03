@@ -22,6 +22,26 @@ function Dashboard() {
   const [leaves] = useLeaveRecords();
   const [departments] = useDepartments();
   const [q, setQ] = useState("");
+  const navigate = useNavigate();
+  const [pickerAction, setPickerAction] = useState<null | { tab: string; label: string }>(null);
+  const [pickQ, setPickQ] = useState("");
+
+  const pickerResults = useMemo(() => {
+    if (!pickerAction) return [];
+    const term = pickQ.trim();
+    const list = term
+      ? employees.filter((e) => e.fullName.includes(term) || e.empNo.includes(term) || e.nationalId.includes(term) || e.phone.includes(term))
+      : employees;
+    return list.slice(0, 10);
+  }, [pickQ, pickerAction, employees]);
+
+  function selectEmployeeForAction(empId: string) {
+    if (!pickerAction) return;
+    const tab = pickerAction.tab;
+    setPickerAction(null);
+    setPickQ("");
+    navigate({ to: "/employees/$id", params: { id: empId }, search: { tab } });
+  }
 
   const stats = useMemo(() => {
     const active = employees.filter((e) => e.status === "active");
