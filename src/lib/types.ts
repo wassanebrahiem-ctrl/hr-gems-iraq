@@ -1,9 +1,9 @@
 // Domain types - Iraqi HR system
 
 export type EmployeeStatus =
-  | "active"          // مستمر
+  | "active"          // ملاك دائم
   | "seconded"        // منسب
-  | "retired"         // متقاعد
+  | "retired"         // عقد مؤقت
   | "dismissed"       // مفصول
   | "assigned"        // تكليف
   | "contract_ended"  // انهاء عقد
@@ -11,9 +11,9 @@ export type EmployeeStatus =
   | "resigned";       // مستقيل
 
 export const EMPLOYEE_STATUS_LABELS: Record<EmployeeStatus, string> = {
-  active: "مستمر",
+  active: "ملاك دائم",
   seconded: "منسب",
-  retired: "متقاعد",
+  retired: "عقد مؤقت",
   dismissed: "مفصول",
   assigned: "تكليف",
   contract_ended: "انهاء عقد",

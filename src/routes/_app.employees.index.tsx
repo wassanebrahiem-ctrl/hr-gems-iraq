@@ -73,7 +73,7 @@ function EmployeesPage() {
   }
 
   function exportCSV() {
-    const rows = [["الرقم الوظيفي", "الاسم", "القسم", "العنوان الوظيفي", "الدرجة", "المرحلة", "تاريخ المباشرة", "الحالة"]];
+    const rows = [["الرقم الوظيفي", "الاسم", "القسم", "العنوان الوظيفي", "الدرجة", "المرحلة", "تاريخ المباشرة", "نوع الخدمة"]];
     filtered.forEach((x) => {
       const d = departments.find((dd) => dd.id === x.e.departmentId);
       rows.push([x.e.empNo, x.e.fullName, d?.name || "", x.e.jobTitle, String(x.e.grade), String(x.e.stage), x.e.startDate, x.e.status]);
@@ -118,7 +118,7 @@ function EmployeesPage() {
           <Filter className="size-4 text-muted-foreground self-center ml-1" />
           <span className="text-xs text-muted-foreground self-center">فلترة سريعة:</span>
           <FilterPill active={filter === "all"} onClick={() => setFilter("all")} count={counts.all}>الكل</FilterPill>
-          <FilterPill active={filter === "active"} onClick={() => setFilter("active")} count={counts.active} tone="success">مستمر</FilterPill>
+          <FilterPill active={filter === "active"} onClick={() => setFilter("active")} count={counts.active} tone="success">ملاك دائم</FilterPill>
           <FilterPill active={filter === "leave"} onClick={() => setFilter("leave")} count={counts.leave} tone="info">في إجازة</FilterPill>
           <FilterPill active={filter === "increment"} onClick={() => setFilter("increment")} count={counts.increment} tone="amber">مستحق العلاوة</FilterPill>
           <FilterPill active={filter === "promotion"} onClick={() => setFilter("promotion")} count={counts.promotion} tone="warning">مستحق الترقية</FilterPill>
@@ -138,7 +138,7 @@ function EmployeesPage() {
                 <th className="text-right px-4 py-3 font-semibold">القسم</th>
                 <th className="text-right px-4 py-3 font-semibold">الدرجة/المرحلة</th>
                 <th className="text-right px-4 py-3 font-semibold">تاريخ المباشرة</th>
-                <th className="text-right px-4 py-3 font-semibold">الحالة</th>
+                <th className="text-right px-4 py-3 font-semibold">نوع الخدمة</th>
                 <th className="text-right px-4 py-3 font-semibold">الإجراءات</th>
               </tr>
             </thead>
@@ -244,7 +244,7 @@ function FilterPill({ children, active, onClick, count, tone = "primary" }: {
 
 function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean }) {
   if (onLeave) return <Badge tone="info">في إجازة</Badge>;
-  if (status === "retired") return <Badge tone="muted">متقاعد</Badge>;
+  if (status === "retired") return <Badge tone="muted">عقد مؤقت</Badge>;
   if (status === "dismissed") return <Badge tone="destructive">مفصول</Badge>;
   if (status === "contract_ended") return <Badge tone="destructive">انهاء عقد</Badge>;
   if (status === "resigned") return <Badge tone="warning">مستقيل</Badge>;
@@ -252,7 +252,7 @@ function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"];
   if (status === "seconded") return <Badge tone="info">منسب</Badge>;
   if (status === "assigned") return <Badge tone="info">تكليف</Badge>;
   if (nearRet) return <Badge tone="warning">قرب التقاعد</Badge>;
-  return <Badge tone="success">مستمر</Badge>;
+  return <Badge tone="success">ملاك دائم</Badge>;
 }
 
 function Badge({ children, tone }: { children: React.ReactNode; tone: "success" | "info" | "warning" | "destructive" | "muted" }) {

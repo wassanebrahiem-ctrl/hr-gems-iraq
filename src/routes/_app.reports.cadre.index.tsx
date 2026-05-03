@@ -87,11 +87,11 @@ function CadreReportPage() {
           </Select>
         </div>
         <div className="min-w-48">
-          <Label className="mb-1 block text-xs">الحالة</Label>
+          <Label className="mb-1 block text-xs">نوع الخدمة</Label>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="active_only">المستمرون فقط</SelectItem>
+              <SelectItem value="active_only">الملاك الدائم فقط</SelectItem>
               <SelectItem value="all">جميع الحالات</SelectItem>
             </SelectContent>
           </Select>
