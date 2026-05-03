@@ -176,14 +176,14 @@ export function EmployeeUnifiedEditDialog({ open, onOpenChange, employee }: Prop
                 <F label="تاريخ المباشرة">
                   <Input type="date" value={emp.startDate} onChange={(e) => setEmp({ ...emp, startDate: e.target.value })} />
                 </F>
-                <F label="الحالة">
+                <F label="نوع الخدمة">
                   <Select value={emp.status} onValueChange={(v) => setEmp({ ...emp, status: v as Employee["status"] })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">مستمر</SelectItem>
+                      <SelectItem value="active">ملاك دائم</SelectItem>
                       <SelectItem value="seconded">منسب</SelectItem>
                       <SelectItem value="assigned">تكليف</SelectItem>
-                      <SelectItem value="retired">متقاعد</SelectItem>
+                      <SelectItem value="retired">عقد مؤقت</SelectItem>
                       <SelectItem value="dismissed">مفصول</SelectItem>
                       <SelectItem value="contract_ended">انهاء عقد</SelectItem>
                       <SelectItem value="resigned">مستقيل</SelectItem>
