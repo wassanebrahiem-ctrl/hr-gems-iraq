@@ -309,10 +309,10 @@ function Chip({ icon: Icon, children }: { icon: React.ComponentType<{ className?
   return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-foreground/10 backdrop-blur border border-primary-foreground/15 text-xs font-medium"><Icon className="size-3.5" />{children}</span>;
 }
 
-function CalcCard({ icon: Icon, tone, title, status, detail, legal, due }: { icon: React.ComponentType<{ className?: string }>; tone: "success" | "amber" | "info" | "destructive"; title: string; status: string; detail: string; legal: string; due: boolean }) {
+function CalcCard({ icon: Icon, tone, title, status, detail, legal, due, action }: { icon: React.ComponentType<{ className?: string }>; tone: "success" | "amber" | "info" | "destructive"; title: string; status: string; detail: string; legal: string; due: boolean; action?: React.ReactNode }) {
   const map = { success: "bg-success/10 text-success", amber: "bg-amber/15 text-amber", info: "bg-info/10 text-info", destructive: "bg-destructive/10 text-destructive" }[tone];
   return (
-    <div className="rounded-2xl bg-card border border-border p-5 shadow-md">
+    <div className="rounded-2xl bg-card border border-border p-5 shadow-md flex flex-col">
       <div className="flex items-center gap-3 mb-3">
         <div className={`size-10 rounded-xl flex items-center justify-center ${map}`}><Icon className="size-5" /></div>
         <div className="font-bold">{title}</div>
@@ -321,6 +321,7 @@ function CalcCard({ icon: Icon, tone, title, status, detail, legal, due }: { ico
       <div className="text-2xl font-extrabold arabic-num">{status}</div>
       <div className="text-xs text-muted-foreground mt-1 arabic-num">{detail}</div>
       <div className="text-[10px] text-muted-foreground mt-2 italic">المرجع: {legal}</div>
+      {action && <div className="mt-3 pt-3 border-t border-border">{action}</div>}
     </div>
   );
 }
