@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2, Crown, Settings2 } from "lucide-react";
+import { ArrowRight, User, CalendarDays, AlertTriangle, Award, TrendingUp, ArrowUp, Phone, IdCard, Plus, FileText, UserCircle, Pencil, Trash2, Crown, Settings2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEmployees, useDepartments, useLeaveRecords, useLeaveTypes, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useSalary, useEmployeeProfiles, useEmployeeDocuments } from "@/lib/data-init";
 import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_app/employees/$id")({
 function EmployeeDetail() {
   const { id } = useParams({ from: "/_app/employees/$id" });
   const { tab } = Route.useSearch();
-  const [employees] = useEmployees();
+  const [employees, setEmployees] = useEmployees();
   const [departments] = useDepartments();
   const [salary] = useSalary();
   const [penalties, setPenalties] = usePenaltyRecords();
@@ -74,6 +74,20 @@ function EmployeeDetail() {
     if (confirmDel.kind === "pen") { setPenalties((p) => p.filter((x) => x.id !== confirmDel.id)); toast.success("تم حذف العقوبة"); }
     if (confirmDel.kind === "com") { setCommendations((p) => p.filter((x) => x.id !== confirmDel.id)); toast.success("تم حذف كتاب الشكر"); }
     setConfirmDel(null);
+  }
+
+  function approveIncrement() {
+    if (!e) return;
+    const today = new Date().toISOString().slice(0, 10);
+    setEmployees((prev) => prev.map((x) => x.id === e.id ? { ...x, lastIncrementDate: today, stage: Math.min((x.stage || 1) + 1, 11) } : x));
+    toast.success("تمت الموافقة على العلاوة وتحديث المرحلة");
+  }
+
+  function approvePromotion() {
+    if (!e) return;
+    const today = new Date().toISOString().slice(0, 10);
+    setEmployees((prev) => prev.map((x) => x.id === e.id ? { ...x, lastPromotionDate: today, grade: Math.max((x.grade || 10) - 1, 1), stage: 1, lastIncrementDate: today } : x));
+    toast.success("تمت الموافقة على الترقية ورفع الدرجة");
   }
 
   return (
@@ -128,6 +142,11 @@ function EmployeeDetail() {
           detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"} | تأخير: ${inc.delayMonths} شهر | إضافة: ${inc.bonusMonths} شهر`}
           legal="قانون رواتب الموظفين 22/2008"
           due={inc.due}
+          action={inc.due ? (
+            <Button size="sm" onClick={approveIncrement} className="gap-1.5 bg-success text-success-foreground hover:bg-success/90 w-full">
+              <CheckCircle2 className="size-4" /> الموافقة على العلاوة
+            </Button>
+          ) : null}
         />
         <CalcCard
           icon={TrendingUp}
@@ -137,6 +156,11 @@ function EmployeeDetail() {
           detail={`خدم ${formatYM(e.lastPromotionDate || e.startDate)} | تأخير: ${pr.delayMonths} شهر | إضافة: ${pr.bonusMonths} شهر`}
           legal="قانون الملاك 25/1960"
           due={pr.due}
+          action={pr.due ? (
+            <Button size="sm" onClick={approvePromotion} className="gap-1.5 bg-amber text-amber-foreground hover:bg-amber/90 w-full">
+              <CheckCircle2 className="size-4" /> الموافقة على الترقية
+            </Button>
+          ) : null}
         />
         <CalcCard
           icon={CalendarDays}
@@ -285,10 +309,10 @@ function Chip({ icon: Icon, children }: { icon: React.ComponentType<{ className?
   return <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-foreground/10 backdrop-blur border border-primary-foreground/15 text-xs font-medium"><Icon className="size-3.5" />{children}</span>;
 }
 
-function CalcCard({ icon: Icon, tone, title, status, detail, legal, due }: { icon: React.ComponentType<{ className?: string }>; tone: "success" | "amber" | "info" | "destructive"; title: string; status: string; detail: string; legal: string; due: boolean }) {
+function CalcCard({ icon: Icon, tone, title, status, detail, legal, due, action }: { icon: React.ComponentType<{ className?: string }>; tone: "success" | "amber" | "info" | "destructive"; title: string; status: string; detail: string; legal: string; due: boolean; action?: React.ReactNode }) {
   const map = { success: "bg-success/10 text-success", amber: "bg-amber/15 text-amber", info: "bg-info/10 text-info", destructive: "bg-destructive/10 text-destructive" }[tone];
   return (
-    <div className="rounded-2xl bg-card border border-border p-5 shadow-md">
+    <div className="rounded-2xl bg-card border border-border p-5 shadow-md flex flex-col">
       <div className="flex items-center gap-3 mb-3">
         <div className={`size-10 rounded-xl flex items-center justify-center ${map}`}><Icon className="size-5" /></div>
         <div className="font-bold">{title}</div>
@@ -297,6 +321,7 @@ function CalcCard({ icon: Icon, tone, title, status, detail, legal, due }: { ico
       <div className="text-2xl font-extrabold arabic-num">{status}</div>
       <div className="text-xs text-muted-foreground mt-1 arabic-num">{detail}</div>
       <div className="text-[10px] text-muted-foreground mt-2 italic">المرجع: {legal}</div>
+      {action && <div className="mt-3 pt-3 border-t border-border">{action}</div>}
     </div>
   );
 }

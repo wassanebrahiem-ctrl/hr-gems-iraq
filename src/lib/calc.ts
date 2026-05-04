@@ -63,6 +63,29 @@ export interface IncrementStatus {
   effectiveServedMonths: number;
 }
 
+// Per Iraqi practice: only first 3 commendations per calendar year count toward seniority
+// Returns total bonus months after applying yearly cap (3 per year), prioritizing earliest dates
+export function countLimitedCommendationBonus(
+  records: CommendationRecord[],
+  types: CommendationType[],
+  maxPerYear = 3,
+): number {
+  const byYear: Record<number, CommendationRecord[]> = {};
+  for (const c of records) {
+    const y = new Date(c.date).getFullYear();
+    (byYear[y] ||= []).push(c);
+  }
+  let total = 0;
+  for (const list of Object.values(byYear)) {
+    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date)).slice(0, maxPerYear);
+    for (const c of sorted) {
+      const t = types.find((x) => x.id === c.commendationTypeId);
+      total += t?.seniorityBonusMonths ?? 0;
+    }
+  }
+  return total;
+}
+
 export function incrementStatus(
   emp: Employee,
   penalties: PenaltyRecord[] = [],
@@ -83,12 +106,11 @@ export function incrementStatus(
     }, 0);
 
   // تقديم من كتب الشكر منذ آخر علاوة (المادة 21 - قانون 14/1991)
-  const bonusMonths = commendations
-    .filter((c) => c.employeeId === emp.id && new Date(c.date) >= lastDate)
-    .reduce((sum, c) => {
-      const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-      return sum + (t?.seniorityBonusMonths ?? 0);
-    }, 0);
+  // قيد: لا يُحتسب أكثر من 3 كتب شكر في السنة الواحدة لكل موظف
+  const bonusMonths = countLimitedCommendationBonus(
+    commendations.filter((c) => c.employeeId === emp.id && new Date(c.date) >= lastDate),
+    commendationTypes,
+  );
 
   const requiredMonths = 12 + delayMonths - bonusMonths;
   const effectiveServedMonths = monthsSinceLast;
@@ -145,12 +167,11 @@ export function promotionStatus(
     }, 0);
 
   // bonus from commendations since last promotion (المادة 21 - قانون 14/1991)
-  const bonusMonths = commendations
-    .filter((c) => c.employeeId === emp.id && new Date(c.date) >= new Date(since))
-    .reduce((sum, c) => {
-      const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-      return sum + (t?.seniorityBonusMonths ?? 0);
-    }, 0);
+  // قيد: لا يُحتسب أكثر من 3 كتب شكر في السنة الواحدة لكل موظف
+  const bonusMonths = countLimitedCommendationBonus(
+    commendations.filter((c) => c.employeeId === emp.id && new Date(c.date) >= new Date(since)),
+    commendationTypes,
+  );
 
   const requiredYears = PROMOTION_YEARS_BY_GRADE[emp.grade] ?? 4;
   const requiredMonths = requiredYears * 12 + delayMonths - bonusMonths;
