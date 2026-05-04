@@ -140,8 +140,21 @@ function EmployeeDetail() {
           title="العلاوة السنوية"
           status={inc.due ? "مستحقة الآن" : `بعد ${inc.monthsRemaining} شهر`}
           detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"} | تأخير: ${inc.delayMonths} شهر | إضافة: ${inc.bonusMonths} شهر`}
+      {/* Calc summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <CalcCard
+          icon={ArrowUp}
+          tone="success"
+          title="العلاوة السنوية"
+          status={inc.due ? "مستحقة الآن" : `بعد ${inc.monthsRemaining} شهر`}
+          detail={`آخر علاوة: ${e.lastIncrementDate ? formatDateAR(e.lastIncrementDate) : "—"} | تأخير: ${inc.delayMonths} شهر | إضافة: ${inc.bonusMonths} شهر`}
           legal="قانون رواتب الموظفين 22/2008"
           due={inc.due}
+          action={inc.due ? (
+            <Button size="sm" onClick={approveIncrement} className="gap-1.5 bg-success text-success-foreground hover:bg-success/90 w-full">
+              <CheckCircle2 className="size-4" /> الموافقة على العلاوة
+            </Button>
+          ) : null}
         />
         <CalcCard
           icon={TrendingUp}
@@ -151,6 +164,11 @@ function EmployeeDetail() {
           detail={`خدم ${formatYM(e.lastPromotionDate || e.startDate)} | تأخير: ${pr.delayMonths} شهر | إضافة: ${pr.bonusMonths} شهر`}
           legal="قانون الملاك 25/1960"
           due={pr.due}
+          action={pr.due ? (
+            <Button size="sm" onClick={approvePromotion} className="gap-1.5 bg-amber text-amber-foreground hover:bg-amber/90 w-full">
+              <CheckCircle2 className="size-4" /> الموافقة على الترقية
+            </Button>
+          ) : null}
         />
         <CalcCard
           icon={CalendarDays}
