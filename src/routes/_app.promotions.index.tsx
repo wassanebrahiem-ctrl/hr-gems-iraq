@@ -88,7 +88,7 @@ function PromotionsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="العلاوات والترفيعات" description="إدارة كاملة لمنح العلاوة السنوية والترقية لكل موظف" icon={TrendingUp} />
+      <PageHeader title="العلاوات والترفيعات" subtitle="إدارة كاملة لمنح العلاوة السنوية والترقية لكل موظف" icon={TrendingUp} />
 
       {/* Filters */}
       <div className="rounded-2xl bg-card border border-border p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
