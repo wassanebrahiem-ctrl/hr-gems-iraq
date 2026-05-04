@@ -63,6 +63,29 @@ export interface IncrementStatus {
   effectiveServedMonths: number;
 }
 
+// Per Iraqi practice: only first 3 commendations per calendar year count toward seniority
+// Returns total bonus months after applying yearly cap (3 per year), prioritizing earliest dates
+export function countLimitedCommendationBonus(
+  records: CommendationRecord[],
+  types: CommendationType[],
+  maxPerYear = 3,
+): number {
+  const byYear: Record<number, CommendationRecord[]> = {};
+  for (const c of records) {
+    const y = new Date(c.date).getFullYear();
+    (byYear[y] ||= []).push(c);
+  }
+  let total = 0;
+  for (const list of Object.values(byYear)) {
+    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date)).slice(0, maxPerYear);
+    for (const c of sorted) {
+      const t = types.find((x) => x.id === c.commendationTypeId);
+      total += t?.seniorityBonusMonths ?? 0;
+    }
+  }
+  return total;
+}
+
 export function incrementStatus(
   emp: Employee,
   penalties: PenaltyRecord[] = [],
