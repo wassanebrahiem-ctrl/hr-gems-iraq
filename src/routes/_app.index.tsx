@@ -171,8 +171,9 @@ function Dashboard() {
           <Zap className="size-5 text-amber" />
           <h3 className="font-extrabold text-lg">إجراءات سريعة</h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <QuickActionLink icon={Plus} label="إضافة موظف" to="/employees" tone="primary" />
+          <QuickActionLink icon={TrendingUp} label="العلاوات والترفيعات" to="/promotions" tone="warning" />
           <QuickActionButton icon={CalendarDays} label="منح إجازة" tone="info" onClick={() => setPickerAction({ tab: "leaves", label: "منح إجازة" })} />
           <QuickActionButton icon={AlertTriangle} label="تسجيل عقوبة" tone="destructive" onClick={() => setPickerAction({ tab: "penalties", label: "تسجيل عقوبة" })} />
           <QuickActionButton icon={Award} label="كتاب شكر" tone="warning" onClick={() => setPickerAction({ tab: "commendations", label: "كتاب شكر" })} />
@@ -238,7 +239,7 @@ const TONE_MAP: Record<Tone, string> = {
   warning: "bg-warning/15 text-warning hover:bg-warning hover:text-warning-foreground",
 };
 
-function QuickActionLink({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: "/employees"; tone: Tone }) {
+function QuickActionLink({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: "/employees" | "/promotions"; tone: Tone }) {
   return (
     <Link to={to} className={`flex flex-col items-center justify-center gap-2 p-5 rounded-2xl transition-smooth ${TONE_MAP[tone]}`}>
       <Icon className="size-6" />
