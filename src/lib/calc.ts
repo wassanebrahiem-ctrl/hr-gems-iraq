@@ -83,12 +83,11 @@ export function incrementStatus(
     }, 0);
 
   // تقديم من كتب الشكر منذ آخر علاوة (المادة 21 - قانون 14/1991)
-  const bonusMonths = commendations
-    .filter((c) => c.employeeId === emp.id && new Date(c.date) >= lastDate)
-    .reduce((sum, c) => {
-      const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-      return sum + (t?.seniorityBonusMonths ?? 0);
-    }, 0);
+  // قيد: لا يُحتسب أكثر من 3 كتب شكر في السنة الواحدة لكل موظف
+  const bonusMonths = countLimitedCommendationBonus(
+    commendations.filter((c) => c.employeeId === emp.id && new Date(c.date) >= lastDate),
+    commendationTypes,
+  );
 
   const requiredMonths = 12 + delayMonths - bonusMonths;
   const effectiveServedMonths = monthsSinceLast;
