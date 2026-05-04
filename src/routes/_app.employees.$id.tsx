@@ -76,6 +76,20 @@ function EmployeeDetail() {
     setConfirmDel(null);
   }
 
+  function approveIncrement() {
+    if (!e) return;
+    const today = new Date().toISOString().slice(0, 10);
+    setEmployees((prev) => prev.map((x) => x.id === e.id ? { ...x, lastIncrementDate: today, stage: Math.min((x.stage || 1) + 1, 11) } : x));
+    toast.success("تمت الموافقة على العلاوة وتحديث المرحلة");
+  }
+
+  function approvePromotion() {
+    if (!e) return;
+    const today = new Date().toISOString().slice(0, 10);
+    setEmployees((prev) => prev.map((x) => x.id === e.id ? { ...x, lastPromotionDate: today, grade: Math.max((x.grade || 10) - 1, 1), stage: 1, lastIncrementDate: today } : x));
+    toast.success("تمت الموافقة على الترقية ورفع الدرجة");
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
