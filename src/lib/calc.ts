@@ -144,12 +144,11 @@ export function promotionStatus(
     }, 0);
 
   // bonus from commendations since last promotion (المادة 21 - قانون 14/1991)
-  const bonusMonths = commendations
-    .filter((c) => c.employeeId === emp.id && new Date(c.date) >= new Date(since))
-    .reduce((sum, c) => {
-      const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-      return sum + (t?.seniorityBonusMonths ?? 0);
-    }, 0);
+  // قيد: لا يُحتسب أكثر من 3 كتب شكر في السنة الواحدة لكل موظف
+  const bonusMonths = countLimitedCommendationBonus(
+    commendations.filter((c) => c.employeeId === emp.id && new Date(c.date) >= new Date(since)),
+    commendationTypes,
+  );
 
   const requiredYears = PROMOTION_YEARS_BY_GRADE[emp.grade] ?? 4;
   const requiredMonths = requiredYears * 12 + delayMonths - bonusMonths;
