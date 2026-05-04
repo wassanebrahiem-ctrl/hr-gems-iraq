@@ -176,6 +176,12 @@ export function EmployeeUnifiedEditDialog({ open, onOpenChange, employee }: Prop
                 <F label="تاريخ المباشرة">
                   <Input type="date" value={emp.startDate} onChange={(e) => setEmp({ ...emp, startDate: e.target.value })} />
                 </F>
+                <F label="تاريخ آخر علاوة (تعديل يدوي)">
+                  <Input type="date" value={emp.lastIncrementDate || ""} onChange={(e) => setEmp({ ...emp, lastIncrementDate: e.target.value || undefined })} />
+                </F>
+                <F label="تاريخ آخر ترقية (تعديل يدوي)">
+                  <Input type="date" value={emp.lastPromotionDate || ""} onChange={(e) => setEmp({ ...emp, lastPromotionDate: e.target.value || undefined })} />
+                </F>
                 <F label="نوع الخدمة">
                   <Select value={emp.status} onValueChange={(v) => setEmp({ ...emp, status: v as Employee["status"] })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
