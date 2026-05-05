@@ -152,6 +152,7 @@ export interface CommendationRecord {
   date: string;
   reason: string;
   createdAt: string;
+  countsTowardBonus?: boolean; // هل يُحتسب ضمن قدم العلاوة/الترفيع (افتراضياً نعم)
 }
 
 export interface SalaryGrade {
