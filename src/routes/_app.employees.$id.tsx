@@ -236,12 +236,18 @@ function EmployeeDetail() {
             title="سجل كتب الشكر والتقدير"
             action={<Button onClick={() => setOpenCom(true)} className="gap-2 bg-amber text-amber-foreground hover:bg-amber/90"><Plus className="size-4" /> منح كتاب شكر</Button>}
           >
-            {empCommend.length === 0 ? <Empty msg="لا توجد كتب شكر مسجلة" /> : (
-              <RecordTable rows={empCommend.map((c) => {
-                const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
-                return { left: t?.name || "—", mid: formatDateAR(c.date), right: `قدم +${t?.seniorityBonusMonths} شهر`, status: "ساري", reason: c.reason, onEdit: () => setEditCom(c), onDelete: () => setConfirmDel({ kind: "com", id: c.id }) };
-              })} />
-            )}
+            {empCommend.length === 0 ? <Empty msg="لا توجد كتب شكر مسجلة" /> : (() => {
+              const countedIds = selectCountedCommendationIds(empCommend, commendationTypes);
+              return (
+                <RecordTable rows={empCommend.map((c) => {
+                  const t = commendationTypes.find((x) => x.id === c.commendationTypeId);
+                  const optedOut = c.countsTowardBonus === false;
+                  const counted = countedIds.has(c.id);
+                  const status = optedOut ? "غير محتسب" : counted ? "محتسب" : "تجاوز سقف 3/سنة";
+                  return { left: t?.name || "—", mid: formatDateAR(c.date), right: `قدم +${t?.seniorityBonusMonths} شهر`, status, reason: c.reason, onEdit: () => setEditCom(c), onDelete: () => setConfirmDel({ kind: "com", id: c.id }) };
+                })} />
+              );
+            })()}
           </SectionShell>
         </TabsContent>
       </Tabs>
