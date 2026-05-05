@@ -64,26 +64,49 @@ export interface IncrementStatus {
 }
 
 // Per Iraqi practice: only first 3 commendations per calendar year count toward seniority
-// Returns total bonus months after applying yearly cap (3 per year), prioritizing earliest dates
+// Records may opt-out via countsTowardBonus=false. Within each year, picks the TOP-N by
+// seniorityBonusMonths (highest bonus first) so the employee benefits from the strongest letters.
 export function countLimitedCommendationBonus(
   records: CommendationRecord[],
   types: CommendationType[],
   maxPerYear = 3,
 ): number {
-  const byYear: Record<number, CommendationRecord[]> = {};
-  for (const c of records) {
+  const eligible = records.filter((c) => c.countsTowardBonus !== false);
+  const byYear: Record<number, { rec: CommendationRecord; bonus: number }[]> = {};
+  for (const c of eligible) {
+    const t = types.find((x) => x.id === c.commendationTypeId);
+    const bonus = t?.seniorityBonusMonths ?? 0;
     const y = new Date(c.date).getFullYear();
-    (byYear[y] ||= []).push(c);
+    (byYear[y] ||= []).push({ rec: c, bonus });
   }
   let total = 0;
   for (const list of Object.values(byYear)) {
-    const sorted = [...list].sort((a, b) => a.date.localeCompare(b.date)).slice(0, maxPerYear);
-    for (const c of sorted) {
-      const t = types.find((x) => x.id === c.commendationTypeId);
-      total += t?.seniorityBonusMonths ?? 0;
-    }
+    const sorted = [...list].sort((a, b) => b.bonus - a.bonus || a.rec.date.localeCompare(b.rec.date)).slice(0, maxPerYear);
+    for (const item of sorted) total += item.bonus;
   }
   return total;
+}
+
+// Returns the set of record IDs actually counted (after yearly cap), useful for UI badges
+export function selectCountedCommendationIds(
+  records: CommendationRecord[],
+  types: CommendationType[],
+  maxPerYear = 3,
+): Set<string> {
+  const eligible = records.filter((c) => c.countsTowardBonus !== false);
+  const byYear: Record<number, { rec: CommendationRecord; bonus: number }[]> = {};
+  for (const c of eligible) {
+    const t = types.find((x) => x.id === c.commendationTypeId);
+    const bonus = t?.seniorityBonusMonths ?? 0;
+    const y = new Date(c.date).getFullYear();
+    (byYear[y] ||= []).push({ rec: c, bonus });
+  }
+  const ids = new Set<string>();
+  for (const list of Object.values(byYear)) {
+    const sorted = [...list].sort((a, b) => b.bonus - a.bonus || a.rec.date.localeCompare(b.rec.date)).slice(0, maxPerYear);
+    for (const item of sorted) ids.add(item.rec.id);
+  }
+  return ids;
 }
 
 export function incrementStatus(
