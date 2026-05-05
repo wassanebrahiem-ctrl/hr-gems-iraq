@@ -464,6 +464,7 @@ function CommendDialog({ open, onOpenChange, employeeId, initial, onSave }: { op
   const [typeId, setTypeId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reason, setReason] = useState("");
+  const [counts, setCounts] = useState(true);
   const submittingRef = useRef(false);
 
   useEffect(() => {
@@ -471,8 +472,9 @@ function CommendDialog({ open, onOpenChange, employeeId, initial, onSave }: { op
     submittingRef.current = false;
     if (initial) {
       setTypeId(initial.commendationTypeId); setDate(initial.date); setReason(initial.reason || "");
+      setCounts(initial.countsTowardBonus !== false);
     } else {
-      setTypeId(""); setDate(new Date().toISOString().slice(0, 10)); setReason("");
+      setTypeId(""); setDate(new Date().toISOString().slice(0, 10)); setReason(""); setCounts(true);
     }
   }, [open, initial]);
 
@@ -481,8 +483,8 @@ function CommendDialog({ open, onOpenChange, employeeId, initial, onSave }: { op
     if (submittingRef.current) return;
     submittingRef.current = true;
     const rec: CommendationRecord = initial
-      ? { ...initial, commendationTypeId: typeId, date, reason }
-      : { id: uid("co_"), employeeId, commendationTypeId: typeId, date, reason, createdAt: new Date().toISOString() };
+      ? { ...initial, commendationTypeId: typeId, date, reason, countsTowardBonus: counts }
+      : { id: uid("co_"), employeeId, commendationTypeId: typeId, date, reason, createdAt: new Date().toISOString(), countsTowardBonus: counts };
     onSave(rec);
     onOpenChange(false);
   }
@@ -493,6 +495,13 @@ function CommendDialog({ open, onOpenChange, employeeId, initial, onSave }: { op
           <div><Label>نوع الكتاب</Label><Select value={typeId} onValueChange={setTypeId}><SelectTrigger><SelectValue placeholder="اختر النوع" /></SelectTrigger><SelectContent>{comTypes.map(t => <SelectItem key={t.id} value={t.id}>{t.name} (+{t.seniorityBonusMonths} شهر قدم)</SelectItem>)}</SelectContent></Select></div>
           <div><Label>التاريخ</Label><Input type="date" value={date} onChange={e => setDate(e.target.value)} required /></div>
           <div><Label>السبب</Label><Textarea rows={2} value={reason} onChange={e => setReason(e.target.value)} required /></div>
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3">
+            <input id="counts" type="checkbox" className="mt-1 size-4 accent-amber" checked={counts} onChange={(ev) => setCounts(ev.target.checked)} />
+            <div className="flex-1">
+              <Label htmlFor="counts" className="cursor-pointer font-bold">يُحتسب ضمن قدم العلاوة/الترفيع</Label>
+              <p className="text-xs text-muted-foreground mt-1">يمكن تسجيل الكتاب دون احتسابه. عند التطبيق يحدد النظام تلقائياً أفضل 3 كتب في السنة (الأعلى قدماً) من بين المحتسبة.</p>
+            </div>
+          </div>
           <DialogFooter><Button type="submit" className="bg-amber text-amber-foreground">حفظ</Button></DialogFooter>
         </form>
       </DialogContent>
