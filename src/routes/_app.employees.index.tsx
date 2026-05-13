@@ -39,7 +39,7 @@ function EmployeesPage() {
       const pr = promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes);
       const currentLeave = leaves.find((l) => l.employeeId === e.id && l.status === "approved" && l.startDate <= today && l.endDate >= today);
       const onLeave = !!currentLeave;
-      const nearRet = isNearRetirement(e.birthDate, 12);
+      const nearRet = isNearRetirement(e.birthDate, 12, e.retirementExtensionMonths || 0);
       return { e, inc, pr, onLeave, currentLeave, nearRet };
     });
   }, [employees, penalties, penaltyTypes, commendations, commendationTypes, leaves]);
