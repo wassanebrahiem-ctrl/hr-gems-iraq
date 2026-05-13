@@ -39,6 +39,8 @@ export interface Employee {
   lastPromotionDate?: string; // آخر ترقية
   status: EmployeeStatus;
   notes?: string;
+  retirementExtensionMonths?: number; // تمديد الخدمة بعد سن التقاعد القانوني (60) - استثناء يدوي
+  retirementExtensionReason?: string;  // سبب التمديد
   createdAt: string;
 }
 
