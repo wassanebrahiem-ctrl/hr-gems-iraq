@@ -184,7 +184,7 @@ function EmployeesPage() {
                       <div className="text-xs text-primary font-semibold arabic-num">{formatYM(x.e.startDate)}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <StatusBadge status={x.e.status} onLeave={x.onLeave} nearRet={x.nearRet} />
+                      <StatusBadge status={x.e.status} onLeave={x.onLeave} nearRet={x.nearRet} pastRet={x.pastRet} />
                       {x.currentLeave && (
                         <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-info">
                           <Calendar className="size-3" />
