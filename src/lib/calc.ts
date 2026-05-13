@@ -45,12 +45,16 @@ export function monthsToRetirement(birthDate: string, extensionMonths = 0): numb
   const b = new Date(birthDate);
   const retire = new Date(b.getFullYear() + RETIREMENT_AGE, b.getMonth(), b.getDate());
   retire.setMonth(retire.getMonth() + (extensionMonths || 0));
-  return Math.max(0, diffMonths(new Date(), retire));
+  return diffMonths(new Date(), retire);
+}
+
+export function isPastRetirement(birthDate: string, extensionMonths = 0): boolean {
+  return monthsToRetirement(birthDate, extensionMonths) < 0;
 }
 
 export function isNearRetirement(birthDate: string, monthsThreshold = 12, extensionMonths = 0): boolean {
   const m = monthsToRetirement(birthDate, extensionMonths);
-  return m <= monthsThreshold && m >= 0;
+  return m >= 0 && m <= monthsThreshold;
 }
 
 // قانون رواتب موظفي الدولة 22/2008 - العلاوة السنوية كل سنة مالية

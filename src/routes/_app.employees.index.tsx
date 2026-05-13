@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes } from "@/lib/data-init";
-import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
+import { incrementStatus, promotionStatus, isNearRetirement, isPastRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
 import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
@@ -40,7 +40,8 @@ function EmployeesPage() {
       const currentLeave = leaves.find((l) => l.employeeId === e.id && l.status === "approved" && l.startDate <= today && l.endDate >= today);
       const onLeave = !!currentLeave;
       const nearRet = isNearRetirement(e.birthDate, 12, e.retirementExtensionMonths || 0);
-      return { e, inc, pr, onLeave, currentLeave, nearRet };
+      const pastRet = isPastRetirement(e.birthDate, e.retirementExtensionMonths || 0);
+      return { e, inc, pr, onLeave, currentLeave, nearRet, pastRet };
     });
   }, [employees, penalties, penaltyTypes, commendations, commendationTypes, leaves]);
 
@@ -183,7 +184,7 @@ function EmployeesPage() {
                       <div className="text-xs text-primary font-semibold arabic-num">{formatYM(x.e.startDate)}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <StatusBadge status={x.e.status} onLeave={x.onLeave} nearRet={x.nearRet} />
+                      <StatusBadge status={x.e.status} onLeave={x.onLeave} nearRet={x.nearRet} pastRet={x.pastRet} />
                       {x.currentLeave && (
                         <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-info">
                           <Calendar className="size-3" />
@@ -250,7 +251,7 @@ function FilterPill({ children, active, onClick, count, tone = "primary" }: {
   );
 }
 
-function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean }) {
+function StatusBadge({ status, onLeave, nearRet, pastRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean; pastRet: boolean }) {
   if (onLeave) return <Badge tone="info">في إجازة</Badge>;
   if (status === "retired") return <Badge tone="muted">عقد مؤقت</Badge>;
   if (status === "dismissed") return <Badge tone="destructive">مفصول</Badge>;
@@ -259,6 +260,7 @@ function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"];
   if (status === "deceased") return <Badge tone="muted">متوفي</Badge>;
   if (status === "seconded") return <Badge tone="info">منسب</Badge>;
   if (status === "assigned") return <Badge tone="info">تكليف</Badge>;
+  if (pastRet) return <Badge tone="destructive">تجاوز سن التقاعد</Badge>;
   if (nearRet) return <Badge tone="warning">قرب التقاعد</Badge>;
   return <Badge tone="success">ملاك دائم</Badge>;
 }
