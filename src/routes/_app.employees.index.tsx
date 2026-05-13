@@ -137,6 +137,7 @@ function EmployeesPage() {
                 <th className="text-right px-4 py-3 font-semibold">الرقم الوظيفي</th>
                 <th className="text-right px-4 py-3 font-semibold">القسم</th>
                 <th className="text-right px-4 py-3 font-semibold">الدرجة/المرحلة</th>
+                <th className="text-right px-4 py-3 font-semibold">العمر</th>
                 <th className="text-right px-4 py-3 font-semibold">تاريخ المباشرة</th>
                 <th className="text-right px-4 py-3 font-semibold">نوع الخدمة</th>
                 <th className="text-right px-4 py-3 font-semibold">الإجراءات</th>
