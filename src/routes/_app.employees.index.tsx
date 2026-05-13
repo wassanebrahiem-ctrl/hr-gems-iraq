@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes } from "@/lib/data-init";
-import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
+import { incrementStatus, promotionStatus, isNearRetirement, isPastRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
 import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
