@@ -251,7 +251,7 @@ function FilterPill({ children, active, onClick, count, tone = "primary" }: {
   );
 }
 
-function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean }) {
+function StatusBadge({ status, onLeave, nearRet, pastRet }: { status: Employee["status"]; onLeave: boolean; nearRet: boolean; pastRet: boolean }) {
   if (onLeave) return <Badge tone="info">في إجازة</Badge>;
   if (status === "retired") return <Badge tone="muted">عقد مؤقت</Badge>;
   if (status === "dismissed") return <Badge tone="destructive">مفصول</Badge>;
@@ -260,6 +260,7 @@ function StatusBadge({ status, onLeave, nearRet }: { status: Employee["status"];
   if (status === "deceased") return <Badge tone="muted">متوفي</Badge>;
   if (status === "seconded") return <Badge tone="info">منسب</Badge>;
   if (status === "assigned") return <Badge tone="info">تكليف</Badge>;
+  if (pastRet) return <Badge tone="destructive">تجاوز سن التقاعد</Badge>;
   if (nearRet) return <Badge tone="warning">قرب التقاعد</Badge>;
   return <Badge tone="success">ملاك دائم</Badge>;
 }
