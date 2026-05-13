@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes } from "@/lib/data-init";
-import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR } from "@/lib/calc";
+import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
 import { EmployeeUnifiedEditDialog } from "@/components/employee/EmployeeUnifiedEditDialog";
@@ -137,6 +137,7 @@ function EmployeesPage() {
                 <th className="text-right px-4 py-3 font-semibold">الرقم الوظيفي</th>
                 <th className="text-right px-4 py-3 font-semibold">القسم</th>
                 <th className="text-right px-4 py-3 font-semibold">الدرجة/المرحلة</th>
+                <th className="text-right px-4 py-3 font-semibold">العمر</th>
                 <th className="text-right px-4 py-3 font-semibold">تاريخ المباشرة</th>
                 <th className="text-right px-4 py-3 font-semibold">نوع الخدمة</th>
                 <th className="text-right px-4 py-3 font-semibold">الإجراءات</th>
@@ -171,6 +172,13 @@ function EmployeesPage() {
                       <div className="text-xs text-muted-foreground arabic-num">المرحلة {x.e.stage}</div>
                     </td>
                     <td className="px-4 py-3">
+                      {x.e.birthDate ? (
+                        <div className="arabic-num font-semibold">{ageInYears(x.e.birthDate)} سنة</div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
                       <div className="arabic-num">{formatDateAR(x.e.startDate)}</div>
                       <div className="text-xs text-primary font-semibold arabic-num">{formatYM(x.e.startDate)}</div>
                     </td>
@@ -197,7 +205,7 @@ function EmployeesPage() {
                 );
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={8} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
+                <tr><td colSpan={9} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
               )}
             </tbody>
           </table>
