@@ -172,6 +172,13 @@ function EmployeesPage() {
                       <div className="text-xs text-muted-foreground arabic-num">المرحلة {x.e.stage}</div>
                     </td>
                     <td className="px-4 py-3">
+                      {x.e.birthDate ? (
+                        <div className="arabic-num font-semibold">{ageInYears(x.e.birthDate)} سنة</div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
                       <div className="arabic-num">{formatDateAR(x.e.startDate)}</div>
                       <div className="text-xs text-primary font-semibold arabic-num">{formatYM(x.e.startDate)}</div>
                     </td>
