@@ -205,7 +205,7 @@ function EmployeesPage() {
                 );
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={8} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
+                <tr><td colSpan={9} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
               )}
             </tbody>
           </table>
