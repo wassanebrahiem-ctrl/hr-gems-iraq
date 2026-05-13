@@ -36,7 +36,7 @@ interface Props {
 const emptyEmp: Omit<Employee, "id" | "createdAt"> = {
   empNo: "", fullName: "", nationalId: "", phone: "", birthDate: "", gender: "male",
   jobTitle: "", position: "", departmentId: "", grade: 7, stage: 1, startDate: "",
-  status: "active", notes: "",
+  status: "active", notes: "", retirementExtensionMonths: 0, retirementExtensionReason: "",
 };
 
 export function EmployeeUnifiedEditDialog({ open, onOpenChange, employee }: Props) {
@@ -196,6 +196,12 @@ export function EmployeeUnifiedEditDialog({ open, onOpenChange, employee }: Prop
                       <SelectItem value="deceased">متوفي</SelectItem>
                     </SelectContent>
                   </Select>
+                </F>
+                <F label="تمديد الخدمة بعد سن التقاعد (أشهر)">
+                  <Input type="number" min={0} value={emp.retirementExtensionMonths ?? 0} onChange={(e) => setEmp({ ...emp, retirementExtensionMonths: Number(e.target.value) || 0 })} placeholder="0" />
+                </F>
+                <F label="سبب التمديد الاستثنائي">
+                  <Input value={emp.retirementExtensionReason || ""} onChange={(e) => setEmp({ ...emp, retirementExtensionReason: e.target.value })} placeholder="مثال: حاجة الدائرة، شهادة عليا..." />
                 </F>
                 <F label="ملاحظات" full>
                   <Textarea rows={2} value={emp.notes || ""} onChange={(e) => setEmp({ ...emp, notes: e.target.value })} />

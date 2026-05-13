@@ -65,7 +65,7 @@ function Reports() {
       .map((e) => ({ e, s: promotionStatus(e, penalties, penaltyTypes, commendations, commendationTypes) }))
       .filter((x) => x.s.due);
 
-    const nearRetirees = employees.filter((e) => isNearRetirement(e.birthDate, 12));
+    const nearRetirees = employees.filter((e) => isNearRetirement(e.birthDate, 12, e.retirementExtensionMonths || 0));
 
     return {
       increments: {
@@ -176,7 +176,7 @@ function Reports() {
         columns: ["#", "الرقم", "الاسم", "تاريخ الميلاد", "الأشهر المتبقية", "القسم"],
         rows: nearRetirees.map((e, i) => {
           const d = departments.find((x) => x.id === e.departmentId);
-          return [i + 1, e.empNo, e.fullName, formatDateAR(e.birthDate), `${monthsToRetirement(e.birthDate)} شهر`, d?.name || "—"];
+          return [i + 1, e.empNo, e.fullName, formatDateAR(e.birthDate), `${monthsToRetirement(e.birthDate, e.retirementExtensionMonths || 0)} شهر`, d?.name || "—"];
         }),
         highlight: nearRetirees.length > 0
           ? `يوجد ${nearRetirees.length} موظف مقارب لسن التقاعد - يلزم البدء بإجراءات الإحالة`

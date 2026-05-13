@@ -29,8 +29,8 @@ export function formatYM(from: string | Date, to: string | Date = new Date()): s
   return `${years} سنة و ${months} شهر`;
 }
 
-// قانون التقاعد رقم 9/2014 - سن التقاعد القانوني 63 (مع إمكانية التمديد إلى 65 لذوي الشهادات العليا)
-export const RETIREMENT_AGE = 63;
+// قانون التقاعد رقم 9/2014 - سن التقاعد القانوني 60 سنة (مع إمكانية التمديد الاستثنائي يدوياً)
+export const RETIREMENT_AGE = 60;
 
 export function ageInYears(birthDate: string): number {
   const b = new Date(birthDate);
@@ -41,14 +41,16 @@ export function ageInYears(birthDate: string): number {
   return age;
 }
 
-export function monthsToRetirement(birthDate: string): number {
+export function monthsToRetirement(birthDate: string, extensionMonths = 0): number {
   const b = new Date(birthDate);
   const retire = new Date(b.getFullYear() + RETIREMENT_AGE, b.getMonth(), b.getDate());
+  retire.setMonth(retire.getMonth() + (extensionMonths || 0));
   return Math.max(0, diffMonths(new Date(), retire));
 }
 
-export function isNearRetirement(birthDate: string, monthsThreshold = 12): boolean {
-  return monthsToRetirement(birthDate) <= monthsThreshold && monthsToRetirement(birthDate) >= 0;
+export function isNearRetirement(birthDate: string, monthsThreshold = 12, extensionMonths = 0): boolean {
+  const m = monthsToRetirement(birthDate, extensionMonths);
+  return m <= monthsThreshold && m >= 0;
 }
 
 // قانون رواتب موظفي الدولة 22/2008 - العلاوة السنوية كل سنة مالية

@@ -66,7 +66,7 @@ function EmployeeDetail() {
   const empDocs = documents.filter((d) => d.employeeId === e.id);
   const profile = profiles.find((p) => p.employeeId === e.id);
   const salaryAmount = baseSalary(e, salary);
-  const retMonths = monthsToRetirement(e.birthDate);
+  const retMonths = monthsToRetirement(e.birthDate, e.retirementExtensionMonths || 0);
 
   function confirmDelete() {
     if (!confirmDel) return;
@@ -167,7 +167,7 @@ function EmployeeDetail() {
           tone={retMonths <= 12 ? "destructive" : "info"}
           title="التقاعد"
           status={`${Math.floor(retMonths / 12)} سنة و ${retMonths % 12} شهر`}
-          detail={`السن القانوني: 63 سنة`}
+          detail={`السن القانوني: 60 سنة${e.retirementExtensionMonths ? ` | تمديد: ${e.retirementExtensionMonths} شهر${e.retirementExtensionReason ? ` (${e.retirementExtensionReason})` : ""}` : ""}`}
           legal="قانون التقاعد الموحد 9/2014"
           due={false}
         />

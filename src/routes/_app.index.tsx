@@ -260,7 +260,7 @@ function QuickActionButton({ icon: Icon, label, tone, onClick }: { icon: React.C
 function NearRetirementList() {
   const [employees] = useEmployees();
   const [departments] = useDepartments();
-  const list = employees.filter((e) => isNearRetirement(e.birthDate, 24)).slice(0, 5);
+  const list = employees.filter((e) => isNearRetirement(e.birthDate, 24, e.retirementExtensionMonths || 0)).slice(0, 5);
 
   if (list.length === 0) {
     return <p className="text-sm text-muted-foreground text-center py-8">لا يوجد موظفون قريبون من التقاعد حالياً</p>;
