@@ -8,7 +8,7 @@ import {
 import type {
   Department, Employee, JobTitle, Position, LeaveType, LeaveRecord,
   PenaltyType, PenaltyRecord, CommendationType, CommendationRecord, SalaryGrade,
-  EmployeeProfile, EmployeeDocument,
+  EmployeeProfile, EmployeeDocument, Committee,
 } from "./types";
 
 export const useEmployees = () => useStore<Employee[]>("employees_v2", SEED_EMPLOYEES);
@@ -26,3 +26,5 @@ export const useCommendationRecords = () => useStore<CommendationRecord[]>("comm
 export const useSalary = () => useStore<SalaryGrade[]>("salary", SEED_SALARY);
 export const useEmployeeProfiles = () => useStore<EmployeeProfile[]>("employeeProfiles", []);
 export const useEmployeeDocuments = () => useStore<EmployeeDocument[]>("employeeDocuments", []);
+export const useCommittees = () => useStore<Committee[]>("committees_v1", []);
+

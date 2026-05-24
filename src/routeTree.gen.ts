@@ -14,6 +14,7 @@ import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppReportsIndexRouteImport } from './routes/_app.reports.index'
 import { Route as AppPromotionsIndexRouteImport } from './routes/_app.promotions.index'
 import { Route as AppEmployeesIndexRouteImport } from './routes/_app.employees.index'
+import { Route as AppCommitteesIndexRouteImport } from './routes/_app.committees.index'
 import { Route as AppAnalyticsIndexRouteImport } from './routes/_app.analytics.index'
 import { Route as AppEmployeesIdRouteImport } from './routes/_app.employees.$id'
 import { Route as AppSettingsSalaryIndexRouteImport } from './routes/_app.settings.salary.index'
@@ -49,6 +50,11 @@ const AppPromotionsIndexRoute = AppPromotionsIndexRouteImport.update({
 const AppEmployeesIndexRoute = AppEmployeesIndexRouteImport.update({
   id: '/employees/',
   path: '/employees/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCommitteesIndexRoute = AppCommitteesIndexRouteImport.update({
+  id: '/committees/',
+  path: '/committees/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsIndexRoute = AppAnalyticsIndexRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/employees/$id': typeof AppEmployeesIdRoute
   '/analytics/': typeof AppAnalyticsIndexRoute
+  '/committees/': typeof AppCommitteesIndexRoute
   '/employees/': typeof AppEmployeesIndexRoute
   '/promotions/': typeof AppPromotionsIndexRoute
   '/reports/': typeof AppReportsIndexRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/employees/$id': typeof AppEmployeesIdRoute
   '/analytics': typeof AppAnalyticsIndexRoute
+  '/committees': typeof AppCommitteesIndexRoute
   '/employees': typeof AppEmployeesIndexRoute
   '/promotions': typeof AppPromotionsIndexRoute
   '/reports': typeof AppReportsIndexRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/employees/$id': typeof AppEmployeesIdRoute
   '/_app/analytics/': typeof AppAnalyticsIndexRoute
+  '/_app/committees/': typeof AppCommitteesIndexRoute
   '/_app/employees/': typeof AppEmployeesIndexRoute
   '/_app/promotions/': typeof AppPromotionsIndexRoute
   '/_app/reports/': typeof AppReportsIndexRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/'
     | '/employees/$id'
     | '/analytics/'
+    | '/committees/'
     | '/employees/'
     | '/promotions/'
     | '/reports/'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/'
     | '/employees/$id'
     | '/analytics'
+    | '/committees'
     | '/employees'
     | '/promotions'
     | '/reports'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/employees/$id'
     | '/_app/analytics/'
+    | '/_app/committees/'
     | '/_app/employees/'
     | '/_app/promotions/'
     | '/_app/reports/'
@@ -271,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/employees'
       fullPath: '/employees/'
       preLoaderRoute: typeof AppEmployeesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/committees/': {
+      id: '/_app/committees/'
+      path: '/committees'
+      fullPath: '/committees/'
+      preLoaderRoute: typeof AppCommitteesIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/analytics/': {
@@ -364,6 +383,7 @@ interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppEmployeesIdRoute: typeof AppEmployeesIdRoute
   AppAnalyticsIndexRoute: typeof AppAnalyticsIndexRoute
+  AppCommitteesIndexRoute: typeof AppCommitteesIndexRoute
   AppEmployeesIndexRoute: typeof AppEmployeesIndexRoute
   AppPromotionsIndexRoute: typeof AppPromotionsIndexRoute
   AppReportsIndexRoute: typeof AppReportsIndexRoute
@@ -383,6 +403,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppEmployeesIdRoute: AppEmployeesIdRoute,
   AppAnalyticsIndexRoute: AppAnalyticsIndexRoute,
+  AppCommitteesIndexRoute: AppCommitteesIndexRoute,
   AppEmployeesIndexRoute: AppEmployeesIndexRoute,
   AppPromotionsIndexRoute: AppPromotionsIndexRoute,
   AppReportsIndexRoute: AppReportsIndexRoute,

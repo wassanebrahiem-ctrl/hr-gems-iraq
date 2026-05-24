@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import {
   LayoutDashboard, Users, FileText, BarChart3, UserCircle,
   Briefcase, Building2, DollarSign, CalendarDays, AlertTriangle,
-  Award, Database, Settings, Sparkles, Crown, ClipboardList, TrendingUp,
+  Award, Database, Settings, Sparkles, Crown, ClipboardList, TrendingUp, Users2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +25,7 @@ const groups: NavGroup[] = [
       { title: "لوحة التحكم", to: "/", icon: LayoutDashboard },
       { title: "الموظفون", to: "/employees", icon: Users },
       { title: "العلاوات والترفيعات", to: "/promotions", icon: TrendingUp },
+      { title: "اللجان", to: "/committees", icon: Users2 },
       { title: "التقارير", to: "/reports", icon: FileText },
       { title: "تقرير ملاك الهيئة", to: "/reports/cadre", icon: ClipboardList },
       { title: "الإحصائيات", to: "/analytics", icon: BarChart3 },

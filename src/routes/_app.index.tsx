@@ -1,12 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, Users, Award, AlertTriangle, CalendarDays, TrendingUp, ArrowUp, Lightbulb, Zap, ShieldCheck, Plus, FileBarChart } from "lucide-react";
+import { Search, Users, Award, AlertTriangle, CalendarDays, TrendingUp, ArrowUp, Lightbulb, Zap, ShieldCheck, Plus, FileBarChart, Users2, Crown, Calendar } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StatCard } from "@/components/StatCard";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useEmployees, usePenaltyRecords, useCommendationRecords, useLeaveRecords, useDepartments } from "@/lib/data-init";
-import { incrementStatus, promotionStatus, isNearRetirement, formatYM } from "@/lib/calc";
+import { useEmployees, usePenaltyRecords, useCommendationRecords, useLeaveRecords, useDepartments, useCommittees } from "@/lib/data-init";
+import { incrementStatus, promotionStatus, isNearRetirement, formatYM, formatDateAR } from "@/lib/calc";
 import { usePenaltyTypes, useCommendationTypes } from "@/lib/data-init";
 
 export const Route = createFileRoute("/_app/")({
@@ -171,14 +171,19 @@ function Dashboard() {
           <Zap className="size-5 text-amber" />
           <h3 className="font-extrabold text-lg">إجراءات سريعة</h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           <QuickActionLink icon={Plus} label="إضافة موظف" to="/employees" tone="primary" />
           <QuickActionLink icon={TrendingUp} label="العلاوات والترفيعات" to="/promotions" tone="warning" />
+          <QuickActionLink icon={Users2} label="اللجان" to="/committees" tone="info" />
           <QuickActionButton icon={CalendarDays} label="منح إجازة" tone="info" onClick={() => setPickerAction({ tab: "leaves", label: "منح إجازة" })} />
           <QuickActionButton icon={AlertTriangle} label="تسجيل عقوبة" tone="destructive" onClick={() => setPickerAction({ tab: "penalties", label: "تسجيل عقوبة" })} />
           <QuickActionButton icon={Award} label="كتاب شكر" tone="warning" onClick={() => setPickerAction({ tab: "commendations", label: "كتاب شكر" })} />
         </div>
       </section>
+
+      {/* Committees */}
+      <CommitteesPreview />
+
 
       {/* Employee picker dialog for quick actions */}
       <Dialog open={!!pickerAction} onOpenChange={(o) => { if (!o) { setPickerAction(null); setPickQ(""); } }}>
@@ -239,7 +244,7 @@ const TONE_MAP: Record<Tone, string> = {
   warning: "bg-warning/15 text-warning hover:bg-warning hover:text-warning-foreground",
 };
 
-function QuickActionLink({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: "/employees" | "/promotions"; tone: Tone }) {
+function QuickActionLink({ icon: Icon, label, to, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; to: "/employees" | "/promotions" | "/committees"; tone: Tone }) {
   return (
     <Link to={to} className={`flex flex-col items-center justify-center gap-2 p-5 rounded-2xl transition-smooth ${TONE_MAP[tone]}`}>
       <Icon className="size-6" />
@@ -285,3 +290,52 @@ function NearRetirementList() {
     </div>
   );
 }
+
+function CommitteesPreview() {
+  const [committees] = useCommittees();
+  const [employees] = useEmployees();
+  const list = useMemo(() => [...committees].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5), [committees]);
+
+  return (
+    <section className="rounded-3xl bg-card border border-border p-6 shadow-md">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Users2 className="size-5 text-info" />
+          <h3 className="font-extrabold text-lg">اللجان</h3>
+        </div>
+        <Link to="/committees" className="text-xs font-bold text-primary hover:underline">عرض الكل ←</Link>
+      </div>
+      {list.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-8">
+          لا توجد لجان بعد.{" "}
+          <Link to="/committees" className="text-primary font-bold hover:underline">أنشئ لجنة جديدة</Link>
+        </p>
+      ) : (
+        <div className="divide-y divide-border">
+          {list.map((c) => {
+            const members = c.memberIds.map((id) => employees.find((e) => e.id === id)).filter(Boolean);
+            const chair = c.chairId ? employees.find((e) => e.id === c.chairId) : null;
+            return (
+              <Link key={c.id} to="/committees" className="flex items-start gap-3 py-3 hover:bg-muted/30 -mx-2 px-2 rounded-lg transition-smooth">
+                <div className="size-10 rounded-xl bg-info/15 text-info flex items-center justify-center shrink-0"><Users2 className="size-5" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-sm">{c.name}</span>
+                    <span className="text-xs text-muted-foreground arabic-num">رقم {c.number}</span>
+                    {c.active ? <span className="text-[10px] font-bold bg-success/15 text-success px-1.5 py-0.5 rounded-full">فعّالة</span> : <span className="text-[10px] font-bold bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">منتهية</span>}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap arabic-num">
+                    <span className="inline-flex items-center gap-1"><Calendar className="size-3" />{formatDateAR(c.date)}</span>
+                    <span>· {members.length} عضو</span>
+                    {chair && <span className="inline-flex items-center gap-1 text-amber"><Crown className="size-3" />{chair.fullName}</span>}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
