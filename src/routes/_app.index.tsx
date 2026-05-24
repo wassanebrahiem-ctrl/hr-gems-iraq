@@ -290,3 +290,52 @@ function NearRetirementList() {
     </div>
   );
 }
+
+function CommitteesPreview() {
+  const [committees] = useCommittees();
+  const [employees] = useEmployees();
+  const list = useMemo(() => [...committees].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5), [committees]);
+
+  return (
+    <section className="rounded-3xl bg-card border border-border p-6 shadow-md">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Users2 className="size-5 text-info" />
+          <h3 className="font-extrabold text-lg">اللجان</h3>
+        </div>
+        <Link to="/committees" className="text-xs font-bold text-primary hover:underline">عرض الكل ←</Link>
+      </div>
+      {list.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-8">
+          لا توجد لجان بعد.{" "}
+          <Link to="/committees" className="text-primary font-bold hover:underline">أنشئ لجنة جديدة</Link>
+        </p>
+      ) : (
+        <div className="divide-y divide-border">
+          {list.map((c) => {
+            const members = c.memberIds.map((id) => employees.find((e) => e.id === id)).filter(Boolean);
+            const chair = c.chairId ? employees.find((e) => e.id === c.chairId) : null;
+            return (
+              <Link key={c.id} to="/committees" className="flex items-start gap-3 py-3 hover:bg-muted/30 -mx-2 px-2 rounded-lg transition-smooth">
+                <div className="size-10 rounded-xl bg-info/15 text-info flex items-center justify-center shrink-0"><Users2 className="size-5" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-sm">{c.name}</span>
+                    <span className="text-xs text-muted-foreground arabic-num">رقم {c.number}</span>
+                    {c.active ? <span className="text-[10px] font-bold bg-success/15 text-success px-1.5 py-0.5 rounded-full">فعّالة</span> : <span className="text-[10px] font-bold bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">منتهية</span>}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap arabic-num">
+                    <span className="inline-flex items-center gap-1"><Calendar className="size-3" />{formatDateAR(c.date)}</span>
+                    <span>· {members.length} عضو</span>
+                    {chair && <span className="inline-flex items-center gap-1 text-amber"><Crown className="size-3" />{chair.fullName}</span>}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
