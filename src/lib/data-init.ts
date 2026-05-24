@@ -26,3 +26,5 @@ export const useCommendationRecords = () => useStore<CommendationRecord[]>("comm
 export const useSalary = () => useStore<SalaryGrade[]>("salary", SEED_SALARY);
 export const useEmployeeProfiles = () => useStore<EmployeeProfile[]>("employeeProfiles", []);
 export const useEmployeeDocuments = () => useStore<EmployeeDocument[]>("employeeDocuments", []);
+export const useCommittees = () => useStore<Committee[]>("committees_v1", []);
+
