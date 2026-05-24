@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppReportsIndexRouteImport } from './routes/_app.reports.index'
 import { Route as AppPromotionsIndexRouteImport } from './routes/_app.promotions.index'
+import { Route as AppCommitteesIndexRouteImport } from './routes/_app.committees.index'
 import { Route as AppEmployeesIndexRouteImport } from './routes/_app.employees.index'
 import { Route as AppCommitteesIndexRouteImport } from './routes/_app.committees.index'
 import { Route as AppAnalyticsIndexRouteImport } from './routes/_app.analytics.index'
@@ -45,6 +46,11 @@ const AppReportsIndexRoute = AppReportsIndexRouteImport.update({
 const AppPromotionsIndexRoute = AppPromotionsIndexRouteImport.update({
   id: '/promotions/',
   path: '/promotions/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCommitteesIndexRoute = AppCommitteesIndexRouteImport.update({
+  id: '/committees/',
+  path: '/committees/',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEmployeesIndexRoute = AppEmployeesIndexRouteImport.update({
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/committees/': typeof AppCommitteesIndexRoute
   '/employees/': typeof AppEmployeesIndexRoute
   '/promotions/': typeof AppPromotionsIndexRoute
+  '/committees/': typeof AppCommitteesIndexRoute
   '/reports/': typeof AppReportsIndexRoute
   '/reports/cadre/': typeof AppReportsCadreIndexRoute
   '/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/committees': typeof AppCommitteesIndexRoute
   '/employees': typeof AppEmployeesIndexRoute
   '/promotions': typeof AppPromotionsIndexRoute
+  '/committees': typeof AppCommitteesIndexRoute
   '/reports': typeof AppReportsIndexRoute
   '/reports/cadre': typeof AppReportsCadreIndexRoute
   '/settings/commendations': typeof AppSettingsCommendationsIndexRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/_app/committees/': typeof AppCommitteesIndexRoute
   '/_app/employees/': typeof AppEmployeesIndexRoute
   '/_app/promotions/': typeof AppPromotionsIndexRoute
+  '/_app/committees/': typeof AppCommitteesIndexRoute
   '/_app/reports/': typeof AppReportsIndexRoute
   '/_app/reports/cadre/': typeof AppReportsCadreIndexRoute
   '/_app/settings/commendations/': typeof AppSettingsCommendationsIndexRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/committees/'
     | '/employees/'
     | '/promotions/'
+    | '/committees/'
     | '/reports/'
     | '/reports/cadre/'
     | '/settings/commendations/'
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/committees'
     | '/employees'
     | '/promotions'
+    | '/committees'
     | '/reports'
     | '/reports/cadre'
     | '/settings/commendations'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '/_app/committees/'
     | '/_app/employees/'
     | '/_app/promotions/'
+    | '/_app/committees/'
     | '/_app/reports/'
     | '/_app/reports/cadre/'
     | '/_app/settings/commendations/'
@@ -276,6 +288,13 @@ declare module '@tanstack/react-router' {
       path: '/promotions'
       fullPath: '/promotions/'
       preLoaderRoute: typeof AppPromotionsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/committees/': {
+      id: '/_app/committees/'
+      path: '/committees'
+      fullPath: '/committees/'
+      preLoaderRoute: typeof AppCommitteesIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/employees/': {
@@ -386,6 +405,7 @@ interface AppRouteChildren {
   AppCommitteesIndexRoute: typeof AppCommitteesIndexRoute
   AppEmployeesIndexRoute: typeof AppEmployeesIndexRoute
   AppPromotionsIndexRoute: typeof AppPromotionsIndexRoute
+  AppCommitteesIndexRoute: typeof AppCommitteesIndexRoute
   AppReportsIndexRoute: typeof AppReportsIndexRoute
   AppReportsCadreIndexRoute: typeof AppReportsCadreIndexRoute
   AppSettingsCommendationsIndexRoute: typeof AppSettingsCommendationsIndexRoute
@@ -406,6 +426,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCommitteesIndexRoute: AppCommitteesIndexRoute,
   AppEmployeesIndexRoute: AppEmployeesIndexRoute,
   AppPromotionsIndexRoute: AppPromotionsIndexRoute,
+  AppCommitteesIndexRoute: AppCommitteesIndexRoute,
   AppReportsIndexRoute: AppReportsIndexRoute,
   AppReportsCadreIndexRoute: AppReportsCadreIndexRoute,
   AppSettingsCommendationsIndexRoute: AppSettingsCommendationsIndexRoute,
@@ -427,12 +448,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
