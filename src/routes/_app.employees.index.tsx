@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Users, Plus, Search, Filter, Eye, Pencil, Trash2, Calendar, AlertTriangle, Award, Download } from "lucide-react";
+import { Users, Plus, Search, Filter, Eye, Pencil, Trash2, Calendar, AlertTriangle, Award, Download, Users2 } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes } from "@/lib/data-init";
+import { useEmployees, useDepartments, usePenaltyRecords, usePenaltyTypes, useCommendationRecords, useCommendationTypes, useLeaveRecords, useLeaveTypes, useCommittees } from "@/lib/data-init";
 import { incrementStatus, promotionStatus, isNearRetirement, isPastRetirement, formatYM, formatDateAR, ageInYears } from "@/lib/calc";
 import type { Employee } from "@/lib/types";
 import { uid } from "@/lib/storage";
@@ -26,6 +26,7 @@ function EmployeesPage() {
   const [commendationTypes] = useCommendationTypes();
   const [leaves] = useLeaveRecords();
   const [leaveTypes] = useLeaveTypes();
+  const [committees] = useCommittees();
 
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -41,9 +42,10 @@ function EmployeesPage() {
       const onLeave = !!currentLeave;
       const nearRet = isNearRetirement(e.birthDate, 12, e.retirementExtensionMonths || 0);
       const pastRet = isPastRetirement(e.birthDate, e.retirementExtensionMonths || 0);
-      return { e, inc, pr, onLeave, currentLeave, nearRet, pastRet };
+      const empCommittees = committees.filter((c) => c.memberIds.includes(e.id));
+      return { e, inc, pr, onLeave, currentLeave, nearRet, pastRet, committees: empCommittees };
     });
-  }, [employees, penalties, penaltyTypes, commendations, commendationTypes, leaves]);
+  }, [employees, penalties, penaltyTypes, commendations, commendationTypes, leaves, committees]);
 
   const counts = useMemo(() => ({
     all: enriched.length,
@@ -141,6 +143,7 @@ function EmployeesPage() {
                 <th className="text-right px-4 py-3 font-semibold">العمر</th>
                 <th className="text-right px-4 py-3 font-semibold">تاريخ المباشرة</th>
                 <th className="text-right px-4 py-3 font-semibold">نوع الخدمة</th>
+                <th className="text-right px-4 py-3 font-semibold">اللجان</th>
                 <th className="text-right px-4 py-3 font-semibold">الإجراءات</th>
               </tr>
             </thead>
@@ -193,6 +196,25 @@ function EmployeesPage() {
                         </div>
                       )}
                     </td>
+                    <td className="px-4 py-3 max-w-[200px]">
+                      {x.committees.length === 0 ? (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {x.committees.slice(0, 2).map((c) => (
+                            <Link key={c.id} to="/committees"
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-semibold bg-info/10 text-info hover:bg-info/20 transition-smooth"
+                              title={`${c.name} · رقم ${c.number}`}>
+                              <Users2 className="size-3" />
+                              <span className="truncate max-w-[120px]">{c.name}</span>
+                            </Link>
+                          ))}
+                          {x.committees.length > 2 && (
+                            <span className="text-[11px] text-muted-foreground arabic-num">+{x.committees.length - 2}</span>
+                          )}
+                        </div>
+                      )}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <Link to="/employees/$id" params={{ id: x.e.id }} search={{ tab: undefined }}>
@@ -206,7 +228,7 @@ function EmployeesPage() {
                 );
               })}
               {filtered.length === 0 && (
-                <tr><td colSpan={9} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
+                <tr><td colSpan={10} className="text-center py-12 text-muted-foreground">لا توجد نتائج</td></tr>
               )}
             </tbody>
           </table>
