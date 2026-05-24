@@ -240,3 +240,18 @@ export interface EmployeeDocument {
   notes?: string;
   createdAt: string;
 }
+
+// ============ Committees (اللجان) ============
+export interface Committee {
+  id: string;
+  name: string;        // اسم اللجنة
+  number: string;      // رقم اللجنة (الأمر الإداري)
+  date: string;        // تاريخ التشكيل YYYY-MM-DD
+  memberIds: string[]; // معرفات الموظفين الأعضاء
+  chairId?: string;    // رئيس اللجنة (اختياري - واحد من الأعضاء)
+  purpose?: string;    // الغرض / المهام
+  active: boolean;     // فعالة أم منتهية
+  endDate?: string;    // تاريخ الانتهاء (اختياري)
+  createdAt: string;
+}
+

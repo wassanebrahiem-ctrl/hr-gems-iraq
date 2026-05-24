@@ -8,7 +8,7 @@ import {
 import type {
   Department, Employee, JobTitle, Position, LeaveType, LeaveRecord,
   PenaltyType, PenaltyRecord, CommendationType, CommendationRecord, SalaryGrade,
-  EmployeeProfile, EmployeeDocument,
+  EmployeeProfile, EmployeeDocument, Committee,
 } from "./types";
 
 export const useEmployees = () => useStore<Employee[]>("employees_v2", SEED_EMPLOYEES);
