@@ -184,7 +184,7 @@ function CommitteesPage() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label>اسم اللجنة *</Label>
+                <Label>اسم اللجنة</Label>
                 <Input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="لجنة المشتريات..." />
               </div>
               <div>
