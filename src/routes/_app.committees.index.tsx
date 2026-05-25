@@ -63,7 +63,7 @@ function CommitteesPage() {
   }
   function save() {
     if (!draft.name.trim() || !draft.number.trim()) {
-      toast.error("اسم اللجنة ورقمها مطلوبان");
+      toast.error("اسم اللجنة ورقم الأمر الإداري مطلوبان");
       return;
     }
     if (draft.memberIds.length === 0) {
