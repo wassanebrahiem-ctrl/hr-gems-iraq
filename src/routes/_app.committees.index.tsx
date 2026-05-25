@@ -117,7 +117,7 @@ function CommitteesPage() {
       <div className="rounded-2xl bg-card border border-border p-4">
         <div className="relative">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث باسم اللجنة أو رقمها..." className="pr-10 h-11 rounded-xl" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث باسم اللجنة أو رقم الأمر الإداري..." className="pr-10 h-11 rounded-xl" />
         </div>
       </div>
 
