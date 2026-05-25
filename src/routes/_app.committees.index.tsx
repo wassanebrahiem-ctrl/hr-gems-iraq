@@ -136,7 +136,7 @@ function CommitteesPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1 arabic-num flex items-center gap-3 flex-wrap">
-                    <span>رقم: <span className="font-bold text-foreground">{c.number}</span></span>
+                    <span>رقم الأمر الإداري: <span className="font-bold text-foreground">{c.number}</span></span>
                     <span className="inline-flex items-center gap-1"><Calendar className="size-3" /> {formatDateAR(c.date)}</span>
                     {c.endDate && <span>الانتهاء: {formatDateAR(c.endDate)}</span>}
                   </div>
