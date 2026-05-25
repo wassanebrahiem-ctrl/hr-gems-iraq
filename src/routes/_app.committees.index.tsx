@@ -188,7 +188,7 @@ function CommitteesPage() {
                 <Input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="لجنة المشتريات..." />
               </div>
               <div>
-                <Label>رقم الأمر الإداري *</Label>
+                <Label>رقم الأمر الإداري</Label>
                 <Input value={draft.number} onChange={(e) => setDraft({ ...draft, number: e.target.value })} placeholder="123/2026" />
               </div>
               <div>
