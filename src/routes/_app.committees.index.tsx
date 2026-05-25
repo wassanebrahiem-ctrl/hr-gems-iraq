@@ -63,7 +63,7 @@ function CommitteesPage() {
   }
   function save() {
     if (!draft.name.trim() || !draft.number.trim()) {
-      toast.error("اسم اللجنة ورقمها مطلوبان");
+      toast.error("اسم اللجنة ورقم الأمر الإداري مطلوبان");
       return;
     }
     if (draft.memberIds.length === 0) {
@@ -117,7 +117,7 @@ function CommitteesPage() {
       <div className="rounded-2xl bg-card border border-border p-4">
         <div className="relative">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث باسم اللجنة أو رقمها..." className="pr-10 h-11 rounded-xl" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث باسم اللجنة أو رقم الأمر الإداري..." className="pr-10 h-11 rounded-xl" />
         </div>
       </div>
 
@@ -136,7 +136,7 @@ function CommitteesPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1 arabic-num flex items-center gap-3 flex-wrap">
-                    <span>رقم: <span className="font-bold text-foreground">{c.number}</span></span>
+                    <span>رقم الأمر الإداري: <span className="font-bold text-foreground">{c.number}</span></span>
                     <span className="inline-flex items-center gap-1"><Calendar className="size-3" /> {formatDateAR(c.date)}</span>
                     {c.endDate && <span>الانتهاء: {formatDateAR(c.endDate)}</span>}
                   </div>
@@ -188,11 +188,11 @@ function CommitteesPage() {
                 <Input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="لجنة المشتريات..." />
               </div>
               <div>
-                <Label>رقم اللجنة *</Label>
+                <Label>رقم الأمر الإداري *</Label>
                 <Input value={draft.number} onChange={(e) => setDraft({ ...draft, number: e.target.value })} placeholder="123/2026" />
               </div>
               <div>
-                <Label>تاريخ التشكيل</Label>
+                <Label>تاريخ الأمر الإداري</Label>
                 <Input type="date" value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} />
               </div>
               <div>
